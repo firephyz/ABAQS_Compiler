@@ -1,0 +1,26 @@
+#!/bin/bash
+
+TOP_DIR="$(cd "$(dirname $0)"; pwd -P)"
+cd $TOP_DIR
+
+if [ $# -eq 0 ]; then
+    echo "Configuring project..."
+    mkdir -p build
+    cd build
+
+    export CC=/usr/bin/gcc-7
+    export CXX=/usr/bin/g++-7
+    cmake ../
+elif [ "$1" = "make" ]; then
+    echo "Building project..."
+    cd build
+    make
+
+    cd ../
+    mkdir -p bin
+    cp $TOP_DIR/build/abaqs $TOP_DIR/bin
+elif [ "$1" = "clean" ]; then
+    echo "Cleaning directories..."
+    rm -rf build
+    rm -rf bin
+fi
