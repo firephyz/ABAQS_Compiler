@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2"  xmlns:spatial="http://www.sbml.org/sbml/level3/version1/spatial/version1" spatial:required="true">
-  <model id="dictyostelium qs" areaUnits="area" timeUnits="second">
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2" >
+  <model id="dictyostelium_qs" areaUnits="area" timeUnits="second">
     <listOfFunctionDefinitions>
       <!-- This specific function is the I(S), the preprocessed response to cAMP. -->
       <!-- As the paper on spiral oscillations does, this can easily be replaced -->
@@ -17,12 +17,12 @@
               <apply>
                 <log/>
                 <apply>
-                  <add/>
+                  <plus/>
                   <cn> 1.0 </cn>
                   <apply>
-                    <div/>
+                    <divide/>
                     <ci> c </ci>
-                    <cn> 1.0 </ci>
+                    <cn> 1.0 </cn>
                   </apply>
                 </apply>
               </apply>
@@ -63,8 +63,8 @@
     <listOfCompartments>
       <compartment id="extracellular"		   spatialDimensions="2" size="1" constant="true"/>
     </listOfCompartments>
-    <listOfjuk>
-      <species id="cAMP"        compartment="extracellular"        boundaryCondition="false"	              constant="false"/>
+    <listOfSpecies>
+      <species id="cAMP"        compartment="extracellular" hasOnlySubstanceUnits="false"        boundaryCondition="false"	              constant="false"/>
     </listOfSpecies>
     <!-- Various parameters and variables used in modeling the cAMP response -->
     <listOfParameters>
@@ -118,11 +118,11 @@
               <ci> repressor </ci>
             </apply>
             <apply>
-              <preprocessor/>
+              <ci> preprocessor </ci>
               <ci> cAMP </ci>
             </apply>
             <apply>
-              <stoich/>
+              <ci> stoich </ci>
             </apply>
           </apply>
         </math>
@@ -158,7 +158,7 @@
               <times/>
               <ci> spike_amount </ci>
               <apply>
-                <heaviside/>
+                <ci> heaviside </ci>
                 <ci> activator </ci>
               </apply>
             </apply>

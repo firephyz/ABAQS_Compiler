@@ -1,3 +1,6 @@
+# Ignore libSBML example files
+examples/
+
 # Prerequisites
 *.d
 

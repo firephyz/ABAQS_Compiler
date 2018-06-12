@@ -1,10 +1,23 @@
-cmake_minimum_required(VERSION 3.5.1)
-project(ABAQS_Compiler)
+CMAKE_MINIMUM_REQUIRED ( VERSION 3.5.1 )
+PROJECT ( ABAQS_Compiler )
 
-file(GLOB sources src/*)
+FILE ( GLOB sources src/* )
 
-add_executable(abaqs ${sources})
+ADD_EXECUTABLE ( abaqs ${sources} )
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++17")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wfatal-errors")
+SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++17" )
+SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall" )
+SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wfatal-errors" )
+
+SET ( LIBSBML_DIR "/home/firephyz/programs/libsbml" )
+INCLUDE_DIRECTORIES ( ${LIBSBML_DIR}/include )
+
+ADD_LIBRARY ( libsbml SHARED IMPORTED )
+SET_TARGET_PROPERTIES (
+  libsbml
+  PROPERTIES
+  IMPORTED_LOCATION "${LIBSBML_DIR}/lib/libsbml.so"
+  INTERFACE_INCLUDE_DIRECTORIES "${LIBSBML_DIR}/include/"
+)
+
+TARGET_LINK_LIBRARIES ( abaqs libsbml )
