@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sbml/SBMLTypes.h>
 
 int main(int argc, char * argv[]) {
 
@@ -8,7 +9,15 @@ int main(int argc, char * argv[]) {
   }
 
   try {
-    std::cout << "Hello world" << std::endl;
+    libsbml::SBMLDocument& doc = *libsbml::readSBMLFromFile(argv[1]);
+    // If we encounter errors, we can't move on. Report to user.
+    if(doc.getNumErrors() > 0) {
+      doc.printErrors();
+      return 1;
+    }
+    else {
+      std::cout << "Everything is good." << std::endl;
+    }
   } catch (...) {
     std::cerr << "Unknown exception.";
     return 1;

@@ -9,7 +9,7 @@ SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c++17" )
 SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall" )
 SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wfatal-errors" )
 
-SET ( LIBSBML_DIR "/home/firephyz/programs/libsbml-beta" )
+SET ( LIBSBML_DIR "/home/kyle/programs/libsbml-beta" )
 INCLUDE_DIRECTORIES ( ${LIBSBML_DIR}/include )
 
 ADD_LIBRARY ( libsbml SHARED IMPORTED )

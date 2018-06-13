@@ -1,0 +1,19 @@
+3 main kinds of QS
+  Gram Negative - AHL and luxI and luxR receptor pairs
+  Gram Positive - AIP and the new ComRS
+  Both - AI-2 is unique since it can be used for intra-species communication
+AHL-Degrading Enzymes
+Biological NOR gate using QS. (AHL signaler)
+Biofilms
+	High cell density leads to complex intra and inter cellular group activity.
+Cheats and their effects on quorums.
+       Express death of cells.
+       Signaling, coercion, cueing
+Simulation Space
+	   Stiffness
+	   Adhesion Molecules
+Systems Biology Markup Language SBML
+	BioModels database
+Scale of simulation
+      Membrane models and the like
+      Gene and receptor models vs a high level abstraction over them

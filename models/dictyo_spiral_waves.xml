@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2" >
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
   <model id="dictyostelium_qs" areaUnits="area" timeUnits="second">
     <listOfFunctionDefinitions>
       <!-- This specific function is the I(S), the preprocessed response to cAMP. -->
@@ -61,24 +61,25 @@
       </functionDefinition>
     </listOfFunctionDefinitions>
     <listOfCompartments>
-      <compartment id="extracellular"		   spatialDimensions="2" size="1" constant="true"/>
+      <compartment id="SIM_SPACE"		   constant="true"/>
     </listOfCompartments>
     <listOfSpecies>
-      <species id="cAMP"        compartment="extracellular" hasOnlySubstanceUnits="false"        boundaryCondition="false"	              constant="false"/>
+      <species id="AUTO_cAMP" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false"	constant="false"/>
+      <species id="CELL_dict" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
-    <!-- Various parameters and variables used in modeling the cAMP response -->
     <listOfParameters>
-      <parameter id="activator" constant="false"/>
-      <parameter id="repressor" constant="false"/>
+      <parameter id="CELL_dict_activator" constant="false"/>
+      <parameter id="CELL_dict_repressor" constant="false"/>
+      <parameter id="CELL_output" constant="false"/>
       <!-- Needs valid values for the FHN model -->
       <parameter id="fhn_epsilon" value="0.0" constant="true"/>
       <parameter id="fhn_gamma" value="0.0" constant="true"/>
       <parameter id="fhn_c" value="0.0" constant="true"/>
       <!-- These parameters respectively correspond to alpha_f, J, alpha_0 and D -->
-      <parameter id="cAMP_inflow" value="0.0" constant="true"/>
-      <parameter id="degrate_rate" value="0.0" constant="true"/>
-      <parameter id="leakage_rate" value="0.0" constant="true"/>
-      <parameter id="spike_amount" value="0.0" constant="true"/>
+      <parameter id="AUTO_cAMP_inflow" value="0.0" constant="true"/>
+      <parameter id="AUTO_cAMP_outflow" value="0.0" constant="true"/>
+      <parameter id="AUTO_cAMP_CELL_dict_base_amount" value="0.0" constant="true"/>
+      <parameter id="AUTO_cAMP_CELL_dict_output_amount" value="0.0" constant="true"/>
     </listOfParameters>
     <listOfInitialAssignments>
       <initialAssignment symbol="activator">
@@ -98,7 +99,7 @@
       </initialAssignment>
     </listOfInitialAssignments>
     <listOfRules>
-      <rateRule variable="activator">
+      <rateRule variable="CELL_dict_activator">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <apply>
             <plus/>
@@ -127,7 +128,7 @@
           </apply>
         </math>
       </rateRule>
-      <rateRule variable="repressor">
+      <rateRule variable="CELL_dict_repressor">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <apply>
             <times/>
@@ -147,30 +148,58 @@
           </apply>
         </math>
       </rateRule>
-      <!-- Needs further work to specify spatial rules and model multiple cells -->
-      <rateRule variable="cAMP">
+      <rateRule variable="CELL_output">
+        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
+          <apply>
+            <ci> heaviside </ci>
+            <ci> CELL_activator </ci>
+          </apply>
+        </math>
+      </rateRule>
+      <rateRule variable="AUTO_cAMP">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <apply>
             <plus/>
-            <ci> cAMP_inflow </ci>
-            <ci> leakage_rate </ci>
+            <ci> AUTO_cAMP_inflow </ci>
+            <ci> AUTO_cAMP_CELL_dict_base_amount </ci>
             <apply>
               <times/>
-              <ci> spike_amount </ci>
-              <apply>
-                <ci> heaviside </ci>
-                <ci> activator </ci>
-              </apply>
+              <ci> AUTO_cAMP_CELL_dict_output_amount </ci>
+              <ci> CELL_output </ci>
             </apply>
             <apply>
               <times/>
               <cn> -1 </cn>
-              <ci> degrate_rate </ci>
-              <ci> cAMP </ci>
+              <ci> AUTO_cAMP_outflow </ci>
+              <ci> AUTO_cAMP </ci>
             </apply>
           </apply>
         </math>
       </rateRule>
     </listOfRules>
+    <!-- <spatial:geometry coordinateSystem="cartesian">
+      <spatial:listOfCoordinateComponents>
+        <spatial:coordinateComponent id="coord_x" type="cartesianX">
+          <spatial:boundaryMin id="x_axis_min" value="0.0"/>
+          <spatial:boundaryMax id="x_axis_max" value="1.0"/>
+        </spatial:coordinateComponent>
+        <spatial:coordinateComponent id="coord_y" type="cartesianY">
+          <spatial:boundaryMin id="y_axis_min" value="0.0"/>
+          <spatial:boundaryMax id="y_axis_max" value="1.0"/>
+        </spatial:coordinateComponent>
+      </spatial:listOfCoordinateComponents>
+      <spatial:listOfDomainTypes>
+        <spatial:domainType id="sim_space_type" spatialDimensions="2"/>
+      </spatial:listOfDomainTypes>
+      <spatial:listOfDomains>
+        <spatial:domain id="sim_space_domain" domainType="sim_space_type"/>
+      </spatial:listOfDomains>
+      <spatial:listOfGeometryDefinitions>
+        <spatial:geometryDefinition id="sim_space" isActive="true">
+        </spatial:geometryDefinition>
+      </spatial:listOfGeometryDefinitions>
+      <spatial:listOfSampledFields>
+      </spatial:listOfSampledFields>
+    </spatial:geometry> -->
   </model>
 </sbml>
