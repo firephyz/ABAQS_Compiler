@@ -1,5 +1,7 @@
 #include "abaqs_arch.h"
 
+// XML library is written in C.
+// Hopefully this doesn't cause problems...
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,6 +14,7 @@ extern "C" {
 #endif
 
 #include <iostream>
+#include <cstdio>
 
 namespace abaqs {
 
@@ -48,6 +51,15 @@ namespace abaqs {
   void Architecture::processXMLDoc(xmlDocPtr doc)
   {
     std::cout << "Processing architecture XML." << std::endl;
+
+    xmlNode * root = xmlDocGetRootElement(doc);
+    //FILE * out = fdopen(stdout, "w");
+    xmlNode * child = xmlFirstElementChild(root);
+    while(child != NULL) {
+      xmlElemDump(stdout, doc, child);
+      child = xmlNextElementSibling(child);
+    }
+
     return;
   }
 
