@@ -9,15 +9,4 @@ SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17" )
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wfatal-errors" )
 
-SET ( LIBSBML_DIR "/home/kyle/programs/libsbml-beta" )
-INCLUDE_DIRECTORIES ( ${LIBSBML_DIR}/include )
-
-ADD_LIBRARY ( libsbml SHARED IMPORTED )
-SET_TARGET_PROPERTIES (
-  libsbml
-  PROPERTIES
-  IMPORTED_LOCATION "${LIBSBML_DIR}/lib/libsbml.so"
-  INTERFACE_INCLUDE_DIRECTORIES "${LIBSBML_DIR}/include/"
-)
-
-TARGET_LINK_LIBRARIES ( abaqs libsbml xml2)
+TARGET_LINK_LIBRARIES ( abaqs sbml xml2)
