@@ -5,9 +5,9 @@ FILE ( GLOB sources src/* )
 
 ADD_EXECUTABLE ( abaqs ${sources} )
 
-SET( CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS} -std=c++17" )
-SET( CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS} -Wall" )
-SET( CMAKE_CPP_FLAGS "${CMAKE_CPP_FLAGS} -Wfatal-errors" )
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17" )
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wfatal-errors" )
 
 SET ( LIBSBML_DIR "/home/kyle/programs/libsbml-beta" )
 INCLUDE_DIRECTORIES ( ${LIBSBML_DIR}/include )

@@ -1,9 +1,15 @@
+#if __cplusplus < 201703L
+#error "We require a C++17 compiler."
+#endif
+
 #include <iostream>
 
 #include <sbml/SBMLTypes.h>
 
 #include "abaqs_arch.h"
 #include "compiler.h"
+
+#include <string>
 
 int main(int argc, char * argv[]) {
 
