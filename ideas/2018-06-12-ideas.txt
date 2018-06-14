@@ -1,7 +1,0 @@
-Attempting to specify the subset of SBML we will support.
-Spatial package is implemented and I can use it but it isn't yet well documented.
- - Spec is ambiguous in some specific cases and has no examples yet to help.
-Analytic geometry or sampled field? Or both?
-Should we support multiple domains?
- - If we are only targeting QS, then we really only have one domain right?
-   The extracellular simulation space.

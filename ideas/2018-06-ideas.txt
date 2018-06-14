@@ -1,0 +1,46 @@
+<<< 2018-06-04 >>>
+
+3 main kinds of QS
+  Gram Negative - AHL and luxI and luxR receptor pairs
+  Gram Positive - AIP and the new ComRS
+  Both - AI-2 is unique since it can be used for intra-species communication
+AHL-Degrading Enzymes
+Biological NOR gate using QS. (AHL signaler)
+Biofilms
+	High cell density leads to complex intra and inter cellular group activity.
+Cheats and their effects on quorums.
+       Express death of cells.
+       Signaling, coercion, cueing
+Simulation Space
+	   Stiffness
+	   Adhesion Molecules
+Systems Biology Markup Language SBML
+	BioModels database
+Scale of simulation
+      Membrane models and the like
+      Gene and receptor models vs a high level abstraction over them
+
+<<< 2018-06-12 >>>
+
+Attempting to specify the subset of SBML we will support.
+Spatial package is implemented and I can use it but it isn't yet well documented.
+ - Spec is ambiguous in some specific cases and has no examples yet to help.
+Analytic geometry or sampled field? Or both?
+Should we support multiple domains?
+ - If we are only targeting QS, then we really only have one domain right?
+   The extracellular simulation space.
+
+<<< 2018-06-13 >>>
+
+Has one compartment, the SIM_SPACE. Represents the FPGA architecture space.
+Each species is defined within this compartment. Additionally,
+  each species is prefixed by either "CELL_" or "AUTO_" to represent that it
+  is a cell or autoinducer respectively.
+Required CELL_output parameter with respective rule. The space_agent uses this
+  to know when to output more chemical.
+
+
+Architectural Ideas
+Ability for space_agent to detect not only the cell_state at its current location
+  but also some additional data related to that cell. Stochastic variation in cell
+  parameters for example.
