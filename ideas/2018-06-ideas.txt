@@ -55,3 +55,5 @@ Talk with Alan about input and output data formats for the entire
 TODO: Change check_valid_abaqs_doc to report all errors in document at once.
         Don't just stop after the first is encountered (as is currently done
         since we use exceptions).
+TODO: Don't let uses specify attributes that we don't use. In the Species
+        element for example.
