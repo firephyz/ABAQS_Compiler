@@ -3,6 +3,7 @@
 #include <sbml/SBMLTypes.h>
 
 #include "abaqs_arch.h"
+#include "compiler.h"
 
 int main(int argc, char * argv[]) {
 
@@ -12,7 +13,7 @@ int main(int argc, char * argv[]) {
   }
 
   try {
-    abaqs::Architecture arch = abaqs::readArchitectureFile(argv[1]);
+    abaqs::Architecture arch(argv[1]);
     libsbml::SBMLDocument doc = *libsbml::readSBMLFromFile(argv[2]);
 
     // If we encounter errors, we can't move on. Report to user.
@@ -22,7 +23,8 @@ int main(int argc, char * argv[]) {
       return 1;
     }
 
-    std::cout << "Everything is good." << std::endl;
+    abaqs::Compiler compiler(doc, arch);
+    compiler.run();
   }
   catch(abaqs::ArchitectureReadFailure& failure) {
     std::cerr << failure.what() << std::endl;

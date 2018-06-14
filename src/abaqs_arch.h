@@ -3,11 +3,21 @@
 
 #include <stdexcept>
 
-#include <libxml/tree.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+  #include <libxml/tree.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 namespace abaqs {
   class Architecture {
+    void processXMLDoc(xmlDocPtr doc);
   public:
+    Architecture(const char * filename);
     int getNumErrors();
     void printErrors();
   };
