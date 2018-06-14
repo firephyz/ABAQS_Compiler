@@ -29,10 +29,20 @@ int main(int argc, char * argv[]) {
       return 1;
     }
 
+    // Don't let documents without SBML version 3.2 support compile.
+    if(doc.checkL3v2Compatibility()) {
+      doc.printErrors();
+      return 1;
+    }
+
     abaqs::Compiler compiler(doc, arch);
     compiler.run();
   }
-  catch(abaqs::ArchitectureReadFailure& failure) {
+  catch (abaqs::InvalidABAQSDocument& error) {
+    std::cerr << error.what() << std::endl;
+    return 1;
+  }
+  catch (abaqs::ArchitectureReadFailure& failure) {
     std::cerr << failure.what() << std::endl;
     return 1;
   }

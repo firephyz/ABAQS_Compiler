@@ -52,13 +52,13 @@ namespace abaqs {
   {
     std::cout << "Processing architecture XML." << std::endl;
 
-    xmlNode * root = xmlDocGetRootElement(doc);
-    //FILE * out = fdopen(stdout, "w");
-    xmlNode * child = xmlFirstElementChild(root);
-    while(child != NULL) {
-      xmlElemDump(stdout, doc, child);
-      child = xmlNextElementSibling(child);
-    }
+    // xmlNode * root = xmlDocGetRootElement(doc);
+    // //FILE * out = fdopen(stdout, "w");
+    // xmlNode * child = xmlFirstElementChild(root);
+    // while(child != NULL) {
+    //   xmlElemDump(stdout, doc, child);
+    //   child = xmlNextElementSibling(child);
+    // }
 
     return;
   }

@@ -70,7 +70,6 @@
     <listOfParameters>
       <parameter id="CELL_dict_activator" constant="false"/>
       <parameter id="CELL_dict_repressor" constant="false"/>
-      <parameter id="CELL_output" constant="false"/>
       <!-- Needs valid values for the FHN model -->
       <parameter id="fhn_epsilon" value="0.0" constant="true"/>
       <parameter id="fhn_gamma" value="0.0" constant="true"/>
@@ -78,8 +77,8 @@
       <!-- These parameters respectively correspond to alpha_f, J, alpha_0 and D -->
       <parameter id="AUTO_cAMP_inflow" value="0.0" constant="true"/>
       <parameter id="AUTO_cAMP_outflow" value="0.0" constant="true"/>
-      <parameter id="AUTO_cAMP_CELL_dict_base_amount" value="0.0" constant="true"/>
-      <parameter id="AUTO_cAMP_CELL_dict_output_amount" value="0.0" constant="true"/>
+      <parameter id="CELL_dict_base_amount" value="0.0" constant="true"/>
+      <parameter id="CELL_dict_output_amount" value="0.0" constant="true"/>
     </listOfParameters>
     <listOfInitialAssignments>
       <initialAssignment symbol="activator">
@@ -148,24 +147,19 @@
           </apply>
         </math>
       </rateRule>
-      <rateRule variable="CELL_output">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
-          <apply>
-            <ci> heaviside </ci>
-            <ci> CELL_activator </ci>
-          </apply>
-        </math>
-      </rateRule>
       <rateRule variable="AUTO_cAMP">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <apply>
             <plus/>
             <ci> AUTO_cAMP_inflow </ci>
-            <ci> AUTO_cAMP_CELL_dict_base_amount </ci>
+            <ci> CELL_dict_base_amount </ci>
             <apply>
               <times/>
-              <ci> AUTO_cAMP_CELL_dict_output_amount </ci>
-              <ci> CELL_output </ci>
+              <ci> CELL_dict_output_amount </ci>
+              <apply>
+                <ci> heaviside </ci>
+                <ci> CELL_activator </ci>
+              </apply>
             </apply>
             <apply>
               <times/>

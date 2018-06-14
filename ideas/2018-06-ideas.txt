@@ -48,4 +48,6 @@ Ability for space_agent to detect not only the cell_state at its current locatio
 <<< 2018-06-14 >>>
 
 Talk with Alan about input and output data formats for the entire
-  architecture. I want to begin specifying some of the layout of the architecture file and it would be nice if that mirrored the input the architecture expects in some way.
+  architecture. I want to begin specifying some of the layout of the
+  architecture file and it would be nice if that mirrored the input the
+  architecture expects in some way.
