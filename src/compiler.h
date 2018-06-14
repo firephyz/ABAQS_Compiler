@@ -6,6 +6,7 @@
 
 #include <sbml/SBMLTypes.h>
 
+#include <string>
 #include <vector>
 #include <stdexcept>
 
@@ -26,8 +27,10 @@ namespace abaqs {
   class InvalidABAQSDocument : public std::runtime_error
   {
   public:
-    InvalidABAQSDocument(const char * string);
+    InvalidABAQSDocument(std::string str);
   };
+
+  void check_valid_compartment(const libsbml::Model& model);
 }
 
 #endif

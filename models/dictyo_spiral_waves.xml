@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
-  <model id="dictyostelium_qs" areaUnits="area" timeUnits="second">
+  <model id="dictyostelium_qs">
     <listOfFunctionDefinitions>
       <!-- This specific function is the I(S), the preprocessed response to cAMP. -->
       <!-- As the paper on spiral oscillations does, this can easily be replaced -->
