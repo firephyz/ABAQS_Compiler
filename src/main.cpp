@@ -8,6 +8,7 @@
 
 #include "abaqs_arch.h"
 #include "compiler.h"
+#include "doc_checks.h"
 
 #include <string>
 
