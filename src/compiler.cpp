@@ -16,6 +16,7 @@ namespace abaqs {
   {
     // Don't proceed unless @doc contains correct members.
     verify_valid_abaqs_doc(*model);
+
     Compiler::processSpecies();
     Compiler::perform_var_dep_analysis();
     return;
@@ -30,19 +31,13 @@ namespace abaqs {
   void
   Compiler::processSpecies()
   {
-    const libsbml::ListOfSpecies * species = model->getListOfSpecies();
-    for(uint i = 0; i < species->size(); ++i) {
-      const libsbml::Species * sp = species->get(i);
+    const libsbml::ListOfSpecies * sps = model->getListOfSpecies();
+    for(uint i = 0; i < sps->size(); ++i) {
+      const libsbml::Species * sp = sps->get(i);
 
       check_valid_species(*sp);
 
-      Compiler::recordSpecies(*sp);
+      species.record(*sp);
     }
-  }
-
-  void
-  Compiler::recordSpecies(const libsbml::Species& sp)
-  {
-    // TODO
   }
 }

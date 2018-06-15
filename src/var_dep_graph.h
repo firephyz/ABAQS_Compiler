@@ -4,21 +4,9 @@
 #include <string>
 #include <vector>
 
+#include "abaqs_types.h"
+
 namespace abaqs {
-
-  class CompilerVar {
-    static int id_counter;
-    bool is_constant;
-    // Value only valid if is_constant=true
-    double value;
-
-  public:
-    CompilerVar(const char * var_name, double value); // Assume variable is constant
-    CompilerVar(const char * var_name); // Variable is not constant
-
-    const int id;
-    const std::string name;
-  };
 
   class VarDepNode {
     std::vector<VarDepNode *> deps;
