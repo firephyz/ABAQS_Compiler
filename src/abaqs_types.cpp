@@ -9,20 +9,6 @@
 
 namespace abaqs {
 
-  int CompilerVar::id_counter = 0;
-
-  CompilerVar::CompilerVar(const char * var_name)
-  : name {var_name}, is_constant {false}, id {id_counter}
-  {
-    ++id_counter;
-  }
-
-  CompilerVar::CompilerVar(const char * var_name, double init_value)
-  : CompilerVar(var_name)
-  {
-    is_constant = true;
-  }
-
   CompilerSpecies::CompilerSpecies(const std::string name)
   : name {std::move(name)}
   {}
@@ -34,20 +20,18 @@ namespace abaqs {
   }
 
   void
-  SpeciesList::record(const libsbml::Species& sp)
+  SpeciesRecord::record(const libsbml::Species& sp)
   {
     const std::string cell_prefix {"CELL_"};
     const std::string auto_prefix {"AUTO_"};
     std::string id = sp.getId();
 
     if(id.find(cell_prefix) != std::string::npos) {
-      std::string name {id.substr(cell_prefix.length(), std::string::npos)};
-      SpeciesList::storeCompilerSpecies(name,
+      SpeciesRecord::storeCompilerSpecies(id,
         CompilerSpecies::SpeciesType::cell);
     }
     else if(id.find(auto_prefix) != std::string::npos) {
-      std::string name {id.substr(auto_prefix.length(), std::string::npos)};
-      SpeciesList::storeCompilerSpecies(name,
+      SpeciesRecord::storeCompilerSpecies(id,
         CompilerSpecies::SpeciesType::autoinducer);
     }
     else {
@@ -59,7 +43,7 @@ namespace abaqs {
   }
 
   void
-  SpeciesList::storeCompilerSpecies(const std::string name,
+  SpeciesRecord::storeCompilerSpecies(const std::string name,
     const CompilerSpecies::SpeciesType type)
   {
     CompilerSpecies sp(name);
@@ -68,7 +52,7 @@ namespace abaqs {
       case CompilerSpecies::SpeciesType::cell:
         if(std::find(cells.begin(), cells.end(), sp) != cells.end()) {
           throw InvalidABAQSDocument(
-            "Reuse of species \'CELL_" + name + "\'."
+            "Reuse of species \'" + name + "\'."
           );
         }
         cells.push_back(std::move(sp));
@@ -76,7 +60,7 @@ namespace abaqs {
       case CompilerSpecies::SpeciesType::autoinducer:
         if(std::find(autoinducers.begin(), autoinducers.end(), sp) != autoinducers.end()) {
           throw InvalidABAQSDocument(
-            "Redeclaration of species \'AUTO_" + name + "\'."
+            "Redeclaration of species \'" + name + "\'."
           );
         }
         autoinducers.push_back(std::move(sp));
@@ -84,15 +68,48 @@ namespace abaqs {
     }
   }
 
-  std::vector<CompilerSpecies>&
-  SpeciesList::getCells()
+  CompilerParameter::CompilerParameter(const std::string name,
+                                       double value,
+                                       const bool is_constant)
+  : name {std::move(name)},
+    value {value},
+    is_constant {is_constant},
+    value_is_valid {true}
+  {}
+
+  CompilerParameter::CompilerParameter(const std::string name,
+                                       const bool is_constant)
+  : name {std::move(name)},
+  is_constant {is_constant},
+  value_is_valid {false}
+  {}
+
+  bool
+  CompilerParameter::operator==(const CompilerParameter& p)
   {
-    return cells;
+    return name == p.name;
   }
 
-  std::vector<CompilerSpecies>&
-  SpeciesList::getAutoinducers()
+  void
+  ParameterList::record(const libsbml::Parameter& p)
   {
-    return autoinducers;
+    CompilerParameter * par = nullptr;
+    const std::string name = p.getId();
+    const bool constant = p.getConstant();
+
+    if(!p.isSetValue()) {
+      par = new CompilerParameter(name, constant);
+    }
+    else {
+      const double value = p.getValue();
+      par = new CompilerParameter(name, value, constant);
+    }
+
+    if(std::find(begin(), end(), *par) != end()) {
+      throw InvalidABAQSDocument(
+        "Redeclaration of parameter \'" + name + "\'.");
+    }
+
+    push_back(std::move(*par));
   }
 }

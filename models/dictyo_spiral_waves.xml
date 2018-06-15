@@ -68,8 +68,8 @@
       <species id="CELL_dict" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
     </listOfSpecies>
     <listOfParameters>
-      <parameter id="CELL_dict_activator" constant="false"/>
-      <parameter id="CELL_dict_repressor" constant="false"/>
+      <parameter id="CELL_dict_activator" value="0.0" constant="false"/>
+      <parameter id="CELL_dict_repressor" value="0.0" constant="false"/>
       <!-- Needs valid values for the FHN model -->
       <parameter id="fhn_epsilon" value="0.0" constant="true"/>
       <parameter id="fhn_gamma" value="0.0" constant="true"/>
@@ -80,23 +80,6 @@
       <parameter id="CELL_dict_base_amount" value="0.0" constant="true"/>
       <parameter id="CELL_dict_output_amount" value="0.0" constant="true"/>
     </listOfParameters>
-    <listOfInitialAssignments>
-      <initialAssignment symbol="activator">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"          xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
-          <cn> 0 </cn>
-        </math>
-      </initialAssignment>
-      <initialAssignment symbol="repressor">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
-          <cn> 0 </cn>
-        </math>
-      </initialAssignment>
-      <initialAssignment symbol="cAMP">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
-          <cn> 0 </cn>
-        </math>
-      </initialAssignment>
-    </listOfInitialAssignments>
     <listOfRules>
       <rateRule variable="CELL_dict_activator">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">

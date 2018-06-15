@@ -10,17 +10,7 @@
 namespace abaqs {
 
   class CompilerVar {
-    static int id_counter;
-    bool is_constant;
-    // Value only valid if is_constant=true
-    double value;
-
-  public:
-    CompilerVar(const char * var_name, double value); // Assume variable is constant
-    CompilerVar(const char * var_name); // Variable is not constant
-
-    const int id;
-    const std::string name;
+    //TODO Internal compiler variable. Not a parameter.
   };
 
   class CompilerSpecies {
@@ -35,17 +25,37 @@ namespace abaqs {
     };
   };
 
-  class SpeciesList {
-    // Shouldn't have hundreds of cells and autoinducers.
-    // Vectors should be plenty efficient.
-    std::vector<CompilerSpecies> cells;
-    std::vector<CompilerSpecies> autoinducers;
+  class SpeciesRecord {
   public:
     void record(const libsbml::Species& sp);
     void storeCompilerSpecies(const std::string name,
       const CompilerSpecies::SpeciesType type);
-    std::vector<CompilerSpecies>& getCells();
-    std::vector<CompilerSpecies>& getAutoinducers();
+
+    // Shouldn't have hundreds of cells and autoinducers.
+    // Vectors should be plenty efficient.
+    std::vector<CompilerSpecies> cells;
+    std::vector<CompilerSpecies> autoinducers;
+  };
+
+  class CompilerParameter {
+  public:
+    CompilerParameter(const std::string name,
+                      double value,
+                      const bool is_constant);
+    CompilerParameter(const std::string name,
+                            const bool is_constant);
+    // Equality for parameters only cares if the name matches
+    bool operator==(const CompilerParameter& p);
+
+    const std::string name;
+    double value;
+    const bool is_constant;
+    bool value_is_valid;
+  };
+
+  class ParameterList : public std::vector<CompilerParameter> {
+  public:
+    void record(const libsbml::Parameter& p);
   };
 }
 

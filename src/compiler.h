@@ -12,16 +12,18 @@
 
 namespace abaqs {
   class Compiler {
-    std::vector<abaqs::VarDepGraph> graphs;
-    abaqs::SpeciesList species;
+    std::vector<VarDepGraph> graphs;
+    SpeciesRecord species;
+    ParameterList parameters;
 
     const libsbml::Model * model;
     const Architecture * arch;
   public:
     Compiler(const libsbml::SBMLDocument& doc,
-      const abaqs::Architecture& arch);
+      const Architecture& arch);
     void run();
     void processSpecies();
+    void processParameters();
     void perform_var_dep_analysis();
 
 
