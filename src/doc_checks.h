@@ -15,6 +15,7 @@ namespace abaqs {
   void check_valid_compartment(const libsbml::Model& model);
   void check_valid_species(const libsbml::Species& sp);
   void check_valid_parameter(const libsbml::Parameter& p);
+  void check_valid_function(const libsbml::FunctionDefinition& func);
 }
 
 #endif

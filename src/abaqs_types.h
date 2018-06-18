@@ -59,6 +59,11 @@ namespace abaqs {
     void record(const libsbml::Parameter& p);
   };
 
+  // When compiler function is used by the RuleProcessor to parse the
+  // rule math defintion, we will simply 'splice' the ASTNode (containing
+  // the entire math definition of a given function) into the
+  // Rule ASTNode. (Can't actually do direct splicing though since
+  // the AST nodes are const. We will pretend like we are.)
   class CompilerFunction {
   public:
     CompilerFunction(const libsbml::FunctionDefinition& func);

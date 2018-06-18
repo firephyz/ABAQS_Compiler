@@ -92,6 +92,8 @@ namespace abaqs {
     for(uint i = 0; i < funcs->size(); ++i) {
       const libsbml::FunctionDefinition * func = funcs->get(i);
 
+      check_valid_function(*func);
+
       functions.record(*func);
     }
   }

@@ -139,4 +139,10 @@ namespace abaqs {
       throw InvalidABAQSDocument("\'SIM_SPACE\' compartment must be constant.");
     }
   }
+
+  void
+  check_valid_function(const libsbml::FunctionDefinition& func)
+  {
+    //TODO
+  }
 }
