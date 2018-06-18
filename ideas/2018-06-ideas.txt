@@ -64,3 +64,7 @@ TODO: libsbml doesn't seem to be catching lexical or syntactic errors anymore.
       Fix this. See comment above Compiler constructor for details.
 
 <<< 2018-06-18 >>>
+
+TODO: Make sure parameters in SBML document that aren't declarated with
+      their value have a rule that assigns it. Otherwise, the parameter
+      will never get a value.

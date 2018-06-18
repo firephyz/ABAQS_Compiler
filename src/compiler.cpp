@@ -10,7 +10,8 @@ namespace abaqs {
 
   Compiler::Compiler(const libsbml::SBMLDocument& doc,
     const Architecture& arch)
-    : arch {&arch}
+    : arch {&arch},
+      rproc {*this}
   {
     model = doc.getModel();
     // libsbml seems to not detect some errors.
@@ -18,15 +19,10 @@ namespace abaqs {
     // '<para' as a parameter is obviously invalid
     // for many reasons but doesn't get caught during
     // the error checks.
+    // Also doesn't catch bad formatting in 'math' tags.
     if(model == nullptr) {
       throw InvalidABAQSDocument("Internal error. SBML model is null.");
     }
-
-    struct RuleProcessorData rule_data {
-      &species,
-      &parameters
-    };
-    rproc.initMemberVariables(rule_data);
   }
 
   void
@@ -37,6 +33,7 @@ namespace abaqs {
 
     // Preprocess SBML file and get all the data
     // present inside the compiler.
+    Compiler::processFunctions();
     Compiler::processSpecies();
     Compiler::processParameters();
     Compiler::processRules();
@@ -84,6 +81,18 @@ namespace abaqs {
       check_valid_species(*sp);
 
       species.record(*sp);
+    }
+  }
+
+  void
+  Compiler::processFunctions()
+  {
+    const libsbml::ListOfFunctionDefinitions * funcs =
+      model->getListOfFunctionDefinitions();
+    for(uint i = 0; i < funcs->size(); ++i) {
+      const libsbml::FunctionDefinition * func = funcs->get(i);
+
+      functions.record(*func);
     }
   }
 }

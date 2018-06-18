@@ -5,6 +5,7 @@
 #include <sbml/SBMLTypes.h>
 
 #include <vector>
+#include <memory>
 #include <string>
 
 namespace abaqs {
@@ -56,6 +57,20 @@ namespace abaqs {
   class ParameterList : public std::vector<CompilerParameter> {
   public:
     void record(const libsbml::Parameter& p);
+  };
+
+  class CompilerFunction {
+  public:
+    CompilerFunction(const libsbml::FunctionDefinition& func);
+    bool operator==(const CompilerFunction& func);
+
+    const libsbml::ASTNode * node;
+    std::string name;
+  };
+
+  class FunctionList : public std::vector<CompilerFunction> {
+  public:
+    void record(const libsbml::FunctionDefinition& func);
   };
 }
 

@@ -14,8 +14,12 @@
 
 namespace abaqs {
   class Compiler {
+    friend class RuleProcessor;
+    friend class VerilogWriter;
+
     SpeciesRecord species;
     ParameterList parameters;
+    FunctionList functions;
     RuleProcessor rproc;
     VerilogWriter output;
 
@@ -28,7 +32,7 @@ namespace abaqs {
     void processSpecies();
     void processParameters();
     void processRules();
-
+    void processFunctions();
 
   };
 }

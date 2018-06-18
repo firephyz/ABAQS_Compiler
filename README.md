@@ -8,6 +8,8 @@ your libs get installed in /usr/lib. All standard locations.
 
 * Built with GCC-7 - Assuming your compiler supports c++17, you can change lines 11 and 12 in $TOP_DIR/configure to your compiler paths.
 
+Information on the ABAQS architecture can be found here: http://ascslab.org/research/abc/abaqs/index.html
+
 ## Building the Project
 Navigate to the project root directory and run
 ```
@@ -21,5 +23,3 @@ Executable binaries will be placed in the bin folder. You can clean the project 
 ```
 ./configure clean
 ```
-
-Information on the ABAQS architecture can be found here: http://ascslab.org/research/abc/abaqs/index.html

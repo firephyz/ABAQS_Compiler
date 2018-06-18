@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 #include <utility>
 
 namespace abaqs {
@@ -111,5 +112,29 @@ namespace abaqs {
     }
 
     push_back(std::move(*par));
+  }
+
+  CompilerFunction::CompilerFunction(const libsbml::FunctionDefinition& func)
+  : name {func.getId()},
+    node {func.getBody()}
+  {}
+
+  bool
+  CompilerFunction::operator==(const CompilerFunction& func)
+  {
+    return name == func.name;
+  }
+
+  void
+  FunctionList::record(const libsbml::FunctionDefinition& func)
+  {
+    CompilerFunction abaqs_func(func);
+
+    if(std::find(begin(), end(), abaqs_func) != end()) {
+      throw InvalidABAQSDocument(
+        "Redeclaration of function \'" + abaqs_func.name + "\'.");
+    }
+
+    push_back(std::move(abaqs_func));
   }
 }
