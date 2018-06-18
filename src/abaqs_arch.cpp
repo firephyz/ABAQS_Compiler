@@ -50,8 +50,6 @@ namespace abaqs {
 
   void Architecture::processXMLDoc(xmlDocPtr doc)
   {
-    std::cout << "Processing architecture XML." << std::endl;
-
     // xmlNode * root = xmlDocGetRootElement(doc);
     // //FILE * out = fdopen(stdout, "w");
     // xmlNode * child = xmlFirstElementChild(root);

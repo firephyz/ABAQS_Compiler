@@ -3,6 +3,8 @@
 
 #include "abaqs_arch.h"
 #include "var_dep_graph.h"
+#include "rule_processor.h"
+#include "verilog_writer.h"
 
 #include <sbml/SBMLTypes.h>
 
@@ -12,9 +14,10 @@
 
 namespace abaqs {
   class Compiler {
-    std::vector<VarDepGraph> graphs;
     SpeciesRecord species;
     ParameterList parameters;
+    RuleProcessor rproc;
+    VerilogWriter output;
 
     const libsbml::Model * model;
     const Architecture * arch;
@@ -24,7 +27,7 @@ namespace abaqs {
     void run();
     void processSpecies();
     void processParameters();
-    void perform_var_dep_analysis();
+    void processRules();
 
 
   };

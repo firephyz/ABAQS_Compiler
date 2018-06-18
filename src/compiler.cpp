@@ -1,6 +1,8 @@
 #include "compiler.h"
 #include "abaqs_arch.h"
 #include "doc_checks.h"
+#include "rule_processor.h"
+#include "verilog_writer.h"
 
 #include <sbml/SBMLTypes.h>
 
@@ -11,14 +13,20 @@ namespace abaqs {
     : arch {&arch}
   {
     model = doc.getModel();
-
     // libsbml seems to not detect some errors.
     // In the parameters list for example, writing
-    // '<para' as a parameter is obviously invalid but doesn't
-    // get caught during the error checks.
+    // '<para' as a parameter is obviously invalid
+    // for many reasons but doesn't get caught during
+    // the error checks.
     if(model == nullptr) {
       throw InvalidABAQSDocument("Internal error. SBML model is null.");
     }
+
+    struct RuleProcessorData rule_data {
+      &species,
+      &parameters
+    };
+    rproc.initMemberVariables(rule_data);
   }
 
   void
@@ -27,16 +35,27 @@ namespace abaqs {
     // Don't proceed unless @doc contains correct members.
     verify_valid_abaqs_doc(*model);
 
+    // Preprocess SBML file and get all the data
+    // present inside the compiler.
     Compiler::processSpecies();
     Compiler::processParameters();
-    Compiler::perform_var_dep_analysis();
-    return;
+    Compiler::processRules();
+
+    output.generate();
   }
 
   void
-  Compiler::perform_var_dep_analysis()
+  Compiler::processRules()
   {
-    // TODO
+    const libsbml::ListOfRules * rules = model->getListOfRules();
+
+    for(uint i = 0; i < rules->size(); ++i) {
+      const libsbml::Rule * rule = rules->get(i);
+
+      // Do requisite rule processing.
+      // Generate dependency graphs, etc.
+      rproc.processRule(*rule);
+    }
   }
 
   void
