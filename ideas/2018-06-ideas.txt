@@ -71,7 +71,7 @@ TODO: Make sure parameters in SBML document that aren't declarated with
 
 <<< 2018-06-19 >>>
 
-TODO: Refactored all of the 'processSomething' functions in Compiler. These
+TODO: Refactor all of the 'processSomething' functions in Compiler. These
       all share a similar structure and can probably be made much nicer
       using templates.
 

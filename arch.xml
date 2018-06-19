@@ -1,5 +1,0 @@
-<test id="test-id">
-  <arg0/>
-  <arg1/>
-  <child id="test-child" param="test-param"/>
-</test>

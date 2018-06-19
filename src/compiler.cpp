@@ -10,8 +10,8 @@ namespace abaqs {
 
   Compiler::Compiler(const libsbml::SBMLDocument& doc,
     const Architecture& arch)
-    : arch {&arch},
-      rproc {*this}
+    : rproc {*this},
+      arch {&arch}
   {
     model = doc.getModel();
     // libsbml seems to not detect some errors.

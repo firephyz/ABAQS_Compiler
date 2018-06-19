@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<architecture version="1.0">
+  <!-- Layout specifies the physical description of the architecture.
+        size: width and height of the architecture in PE's -->
+  <layout size="100"/>
+  <initialConditions>
+  </initialConditions>
+  <listOfAgents>
+    <!-- Agent declares the agents interacting in the simulation
+          id: name of the agent. Must correspond exactly to one of the
+              species listed in the SBML model file.
+          is_cell: Tells the compiler if this agent should be a discrete
+                   cell which lives in a compartment or if it simply
+                   a chemical property local to a compartment. -->
+    <agent id="chemokine" is_cell="false"/>
+    <agent id="bacteria" is_cell="false"/>
+    <agent id="tcell" is_cell="true"/>
+    <agent id="macrophage" is_cell="true"/>
+  </listOfAgents>
+</architecture>

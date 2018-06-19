@@ -69,8 +69,8 @@ namespace abaqs {
     CompilerFunction(const libsbml::FunctionDefinition& func);
     bool operator==(const CompilerFunction& func);
 
-    const libsbml::ASTNode * node;
     std::string name;
+    const libsbml::ASTNode * node;
   };
 
   class FunctionList : public std::vector<CompilerFunction> {
