@@ -145,4 +145,26 @@ namespace abaqs {
   {
     //TODO
   }
+
+  void
+  check_valid_rule(const libsbml::Rule& rule)
+  {
+    if(!rule.isSetVariable()) {
+      throw InvalidABAQSDocument("A rule is missing its variable attribute.");
+    }
+
+    //TODO: Figure out if this is implicity doing a copy
+    std::string variable {rule.getVariable()};
+
+    if(rule.isAlgebraic()) {
+      throw InvalidABAQSDocument(
+        "Rule for variable \'" + variable + "\' is declared as"
+        "the unsupported type \'algebraicRule\'.");
+    }
+    if(!rule.isSetMath()) {
+      throw InvalidABAQSDocument(
+        "Rule for variable \'" + variable + "\' is missing"
+        "its math element.");
+    }
+  }
 }

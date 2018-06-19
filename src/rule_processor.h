@@ -2,6 +2,7 @@
 #define RULE_PROCESSOR_INCLUDED
 
 #include "abaqs_types.h"
+#include "ast.h"
 
 namespace abaqs {
   // Forware declare for when compiler.h includes this file
@@ -10,11 +11,11 @@ namespace abaqs {
   class RuleProcessor {
   private:
     Compiler& compiler;
-//    std::vector<Graph>
 
   public:
       RuleProcessor(Compiler& compiler);
       void processRule(const libsbml::Rule& rule);
+      AST * convertMathToAST(const libsbml::ASTNode * rule);
   };
 }
 

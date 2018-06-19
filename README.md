@@ -23,3 +23,6 @@ Executable binaries will be placed in the bin folder. You can clean the project 
 ```
 ./configure clean
 ```
+
+## SBML Model Requirements
+All rateRules must be correctly written so that dt is interpreted as the smallest time step in the simulation. We do not currently support different units of time.

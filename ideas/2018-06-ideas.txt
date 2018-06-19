@@ -71,9 +71,17 @@ TODO: Make sure parameters in SBML document that aren't declarated with
 
 <<< 2018-06-19 >>>
 
+Ask Jamieson what is masters degree even for.
+
 TODO: Refactor all of the 'processSomething' functions in Compiler. These
       all share a similar structure and can probably be made much nicer
       using templates.
+
+TODO: Remove CompilerSomething from abaqs_types (those that are thin facades
+      over std::vector). There is a lot of repetition here and it can all be
+      solved by putting the checks performed in the 'record' member function
+      into the relevant 'check_valid_something' functions. The 'Compiler'
+      member variables can be simple std::vectors.
 
 Granuloma Paper:
   Space: 100x100 compartment space. Macrophages and T cell agents are contained

@@ -49,6 +49,8 @@ namespace abaqs {
     for(uint i = 0; i < rules->size(); ++i) {
       const libsbml::Rule * rule = rules->get(i);
 
+      check_valid_rule(*rule);
+
       // Do requisite rule processing.
       // Generate dependency graphs, etc.
       rproc.processRule(*rule);

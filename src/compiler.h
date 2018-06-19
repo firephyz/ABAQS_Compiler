@@ -5,6 +5,7 @@
 #include "var_dep_graph.h"
 #include "rule_processor.h"
 #include "verilog_writer.h"
+#include "rule.h"
 
 #include <sbml/SBMLTypes.h>
 
@@ -14,12 +15,11 @@
 
 namespace abaqs {
   class Compiler {
-    friend class RuleProcessor;
-    friend class VerilogWriter;
-
     SpeciesRecord species;
     ParameterList parameters;
     FunctionList functions;
+    std::vector<CompilerRule> rules;
+
     RuleProcessor rproc;
     VerilogWriter output;
 
@@ -34,6 +34,8 @@ namespace abaqs {
     void processRules();
     void processFunctions();
 
+    friend class RuleProcessor;
+    friend class VerilogWriter;
   };
 }
 
