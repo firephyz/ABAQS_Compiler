@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Segovia-Juarez, J.L., Ganguli, S., Kirschner, D., 2004. Identifying
+    control mechanisms of granuloma formation during M. tuberculosis
+    infection using an agent-based model. -->
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="dictyostelium_qs">
+    <listOfFunctionDefinitions>
+    </listOfFunctionDefinitions>
+    <listOfCompartments>
+      <compartment id="SIM_SPACE"		   constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="chemokine" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false"	constant="false"/>
+      <species id="bacteria"  compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false"	constant="false"/>
+      <species id="tcell" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false"	constant="false"/>
+      <species id="macrophage" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false"	constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <!-- See table 1 in paper -->
+      <parameter id="chemo_diff_coef" value="0.64" constant="true"/>
+      <parameter id="chemo_deg_coef" value="0.001" constant="true"/>
+      <parameter id="prob_macro_kill_bact" value="0.0851" constant="true"/>
+      <parameter id="prob_t_kill_macro" value="0.0631" constant="true"/>
+      <parameter id="bact_kill_percentage" value="0.5" constant="true"/>
+      <parameter id="comp_bact_carry_cap" value="200" constant="true"/>
+      <parameter id="bact_intercell_growth" value="0.00021" constant="true"/>
+      <parameter id="bact_extracell_growth" value="0.00015" constant="true"/>
+      <parameter id="bact_until_chronic" value="10" constant="true"/>
+      <parameter id="bact_until_burst" value="20" constant="true"/>
+      <parameter id="t_required_activation" value="4" constant="true"/>
+      <parameter id="prob_t_recruit" value="0.32" constant="true"/>
+      <parameter id="prob_t_movement" value="0.0497" constant="true"/>
+      <parameter id="prob_t_activate_macro" value="0.06" constant="true"/>
+      <parameter id="t_lifespan" value="3" constant="true"/>
+      <parameter id="t_delay" value="10" constant="true"/>
+      <parameter id="prob_macro_recruit" value="0.0211" constant="true"/>
+      <parameter id="macro_resting_lifespan" value="100" constant="true"/>
+      <parameter id="macro_activated_lifespan" value="10" constant="true"/>
+      <parameter id="bursts_until_necrotic" value="8" constant="true"/>
+      <!-- speeds in micrometers/min -->
+      <parameter id="t_speed" value="10" constant="true"/>
+      <parameter id="macro_rest_speed" value="1" constant="true"/>
+      <parameter id="macro_active_speed" value="0.025" constant="true"/>
+      <parameter id="macro_infected_speed" value="0.0007" constant="true"/>
+      <!-- not including 'Initial No. of resting macrophages'.
+           This will be in architecture file. -->
+      <parameter id="macro_rest_bact_kill" value="2" constant="true"/>
+      <parameter id="macro_active_bact_kill" value="10" constant="true"/>
+    </listOfParameters>
+    <listOfRules>
+    </listOfRules>
+  </model>
+</sbml>

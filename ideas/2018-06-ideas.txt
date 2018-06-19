@@ -68,3 +68,59 @@ TODO: libsbml doesn't seem to be catching lexical or syntactic errors anymore.
 TODO: Make sure parameters in SBML document that aren't declarated with
       their value have a rule that assigns it. Otherwise, the parameter
       will never get a value.
+
+<<< 2018-06-19 >>>
+
+TODO: Refactored all of the 'processSomething' functions in Compiler. These
+      all share a similar structure and can probably be made much nicer
+      using templates.
+
+Granuloma Paper:
+  Space: 100x100 compartment space. Macrophages and T cell agents are contained
+         within these compartments. Bacteria and chemokines are continuously
+         contained with these compartments. Some compartments are designated
+         as source compartments from which T cells and macrophages enter
+         the simulation lattice.
+         Comparments can be assigned a "necrotic" attribute if the number
+         of T cell killings or macrophage deaths in that compartment
+         exceeds 8.
+  Time: One time step is 6s (the diffusion rate of chemokines). T cells
+        update their movement once every 100 time steps. Macrophage time
+        steps vary (according to their infected and activated states) from
+        100 to 145,000.
+        A simulation varies from 200 to 500 days. 7.2 million time steps.
+  Continuous agents:
+    Chemokines: Infected, chronically infected and activated macrophages
+                are sources for chemokines. Chemokines diffuse and
+                eventually deteriorate with a half life ranging from 2
+                to 4 hours.
+    Bacteria: Minimum of 10 are required to infect a macrophage.
+              Doubling rate is about 75 hours.
+              Max amount of bacteria per compartment is 200 (10 times amount
+              macrophage can hold before bursting)
+              Growth is logistic with respect to this maximum.
+  T Cells: Only one can share a compartment with a macrophage.
+           T cells enter the lattice (via the source compartments) after
+           10 days with a specific probability of appearing. The source
+           compartments which bring new T cells in are directly related
+           to the concentration of chemokines in the area.
+           T cells are assigned a random lifespan ranging from 0 to 3 days
+           and they disappear after this time elapses.
+           T cells move according to biased random walk. The probabilities
+           of moving in each direction is affected by the chemokine
+           concentration. Movement restrictions align perfectly with ABAQS.
+  Macrophages: Only one can occupy a compartment at a time.
+               Attributes include age, number of intercellular bacteria
+               and state (resting, infected, chronically infected or activated)
+               Lifespan randomly assigned from 0-100 days.
+               Enter the lattice via source compartments if the concentration
+               of chemokines is above a specific level.
+               State transitions are well described in the paper.
+
+Problems with the Granuloma paper related to simulating it on ABAQS.
+  - One compartment must be able to hold two different agents at the same
+    time, T cells and macrophages. This can be simulated however.
+  - Compartments must be able to be assigned a "necrotic" value.
+  - Some compartments must be designated as "source compartments" from which
+  - T cells and macrophages can enter the simulation.
+  - Many random variables and occurrences.

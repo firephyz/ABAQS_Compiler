@@ -27,20 +27,22 @@ namespace abaqs {
     const std::string auto_prefix {"AUTO_"};
     std::string id = sp.getId();
 
-    if(id.find(cell_prefix) != std::string::npos) {
-      SpeciesRecord::storeCompilerSpecies(id,
-        CompilerSpecies::SpeciesType::cell);
-    }
-    else if(id.find(auto_prefix) != std::string::npos) {
-      SpeciesRecord::storeCompilerSpecies(id,
-        CompilerSpecies::SpeciesType::autoinducer);
-    }
-    else {
-      throw InvalidABAQSDocument(
-        "Species \'" + id + "\' is missing the "
-        "\'CELL_\' or \'AUTO_\' prefix."
-      );
-    }
+    //TODO: Implement species cross referencing with the architecture
+    // file so we know what type it is. Autoinducer or cell.
+    // if(id.find(cell_prefix) != std::string::npos) {
+    //   SpeciesRecord::storeCompilerSpecies(id,
+    //     CompilerSpecies::SpeciesType::cell);
+    // }
+    // else if(id.find(auto_prefix) != std::string::npos) {
+    //   SpeciesRecord::storeCompilerSpecies(id,
+    //     CompilerSpecies::SpeciesType::autoinducer);
+    // }
+    // else {
+    //   throw InvalidABAQSDocument(
+    //     "Species \'" + id + "\' is missing the "
+    //     "\'CELL_\' or \'AUTO_\' prefix."
+    //   );
+    // }
   }
 
   void
