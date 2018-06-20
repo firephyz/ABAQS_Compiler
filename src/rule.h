@@ -17,11 +17,11 @@ namespace abaqs {
   public:
     const RuleType type;
     const std::string var_name;
-    std::unique_ptr<const AST> math;
+    const AST math;
     
     CompilerRule(const RuleType type,
-                 const std::string& name,
-                 const AST * math);
+                 const std::string&& name,
+                 AST math);
   };
 }
 

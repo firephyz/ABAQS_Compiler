@@ -6,9 +6,9 @@
 
 namespace abaqs {
   CompilerRule::CompilerRule(const RuleType type,
-                             const std::string& name,
-                             const AST * math0)
+                             const std::string&& name,
+                             AST math)
   : type {type},
-    var_name {std::move(name)},
-    math (math0) {}
+    var_name {name},
+    math {std::move(math)} {}
 }

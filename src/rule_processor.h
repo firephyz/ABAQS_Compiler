@@ -4,6 +4,8 @@
 #include "abaqs_types.h"
 #include "ast.h"
 
+#include <memory>
+
 namespace abaqs {
   // Forware declare for when compiler.h includes this file
   class Compiler;
@@ -15,8 +17,13 @@ namespace abaqs {
   public:
       RuleProcessor(Compiler& compiler);
       void processRule(const libsbml::Rule& rule);
-      AST * convertMathToAST(const libsbml::ASTNode * rule);
+      AST&& convertMathToAST(
+        const libsbml::ASTNode * rule);
   };
+
+  // Determines ASTBuiltinType from libsbml type
+  ASTBuiltinType determineBuiltinType(
+    const libsbml::ASTNodeType_t type);
 }
 
 // compiler.h needs to know the entire layout of RuleProcessor.

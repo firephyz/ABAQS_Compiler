@@ -132,3 +132,8 @@ Problems with the Granuloma paper related to simulating it on ABAQS.
   - Some compartments must be designated as "source compartments" from which
   - T cells and macrophages can enter the simulation.
   - Many random variables and occurrences.
+
+<<< 2018-06-20 >>>
+verilog library, new model, supercomputer, senior design, papers
+
+leg up

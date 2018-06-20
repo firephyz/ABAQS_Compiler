@@ -2,6 +2,7 @@
 examples/
 build/
 bin/
+.vscode/
 
 # Prerequisites
 *.d

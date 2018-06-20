@@ -35,6 +35,7 @@ namespace abaqs {
     void processFunctions();
 
     friend class RuleProcessor;
+    friend class AST;
     friend class VerilogWriter;
   };
 }

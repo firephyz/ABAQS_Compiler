@@ -7,7 +7,6 @@ ADD_EXECUTABLE ( abaqs ${sources} )
 
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17" )
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wfatal-errors" )
 SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g" )
 
-TARGET_LINK_LIBRARIES ( abaqs sbml xml2)
+TARGET_LINK_LIBRARIES ( abaqs sbml xml2 )
