@@ -3,6 +3,7 @@
 
 #include "ast.h"
 
+#include <iostream>
 #include <string>
 #include <memory>
 
@@ -14,15 +15,30 @@ namespace abaqs {
   };
 
   class CompilerRule {
+  private:
+    AST * convertSBMLToAST(const libsbml::ASTNode * rule);
   public:
     const RuleType type;
-    const std::string var_name;
-    const AST math;
+    std::string var_name;
+    std::unique_ptr<AST> math;
     
     CompilerRule(const RuleType type,
                  const std::string&& name,
-                 AST math);
+                 const libsbml::ASTNode * math);
+    CompilerRule(CompilerRule&& rule) = default;
+    // Don't want to copy the AST
+    CompilerRule(const CompilerRule& rule) = delete;
+
+    friend std::ostream& operator<<(
+      std::ostream& out, const CompilerRule& tree);
   };
+
+  std::ostream& operator<<(
+      std::ostream& out, const CompilerRule& tree);
+
+  // Determines ASTBuiltinType from libsbml type
+  ASTBuiltinType determineBuiltinType(
+    const libsbml::ASTNodeType_t type);
 }
 
 #endif

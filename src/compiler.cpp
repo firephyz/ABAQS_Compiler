@@ -38,6 +38,10 @@ namespace abaqs {
     Compiler::processParameters();
     Compiler::processRules();
 
+    for(auto& rule : rules) {
+      std::cout << rule << std::endl; 
+    }
+
     output.generate();
   }
 

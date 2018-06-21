@@ -117,8 +117,7 @@
             <ci> fhn_epsilon </ci>
             <apply>
               <plus/>
-              <ci> activator>
-              </ci>
+              <ci> activator </ci>
               <apply>
                 <times/>
                 <cn> -1.0 </cn>
