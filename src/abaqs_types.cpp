@@ -149,4 +149,10 @@ namespace abaqs {
 
     push_back(std::move(abaqs_func));
   }
+
+  CompilerInitAssignment::CompilerInitAssignment(
+    const libsbml::InitialAssignment& init)
+    : var_name(init.getSymbol())
+    , ast(AST(init.getMath()))
+  {}
 }

@@ -36,6 +36,28 @@
             <bvar>
               <ci> x </ci>
             </bvar>
+            <!--<piecewise>
+              <piece>
+                <cn> 1.0 </cn>
+                <apply>
+                  <gt/>
+                  <ci> x </ci>
+                  <cn> 0 </cn>
+                </apply>
+              </piece>-->
+              <!-- Next piece is just for testing. Remove -->
+              <!--<piece>
+                <cn> 5 </cn>
+                <apply>
+                  <eq/>
+                  <ci> x </ci>
+                  <cn> 10 </cn>
+                </apply>
+              </piece>
+              <otherwise>
+                <cn> 0 </cn>
+              </otherwise>
+            </piecewise>-->
             <cn> 5 </cn>
           </lambda>
         </math>
@@ -50,9 +72,9 @@
     </listOfSpecies>
     <listOfParameters>
       <!-- Parameters required by ABAQS -->
-      <parameter id="Q_IN" value="0.0" constant="false"/>
-      <parameter id="MOVE_DIR" value="0" constant="false"/>
-      <parameter id="MOVE_RQ" value="0" constant="false"/>
+      <parameter id="Q_OUT" constant="false"/>
+      <parameter id="MOVE_DIR" constant="false"/>
+      <parameter id="MOVE_RQ" constant="false"/>
 
       <parameter id="activator" value="0.0" constant="false"/>
       <parameter id="repressor" value="0.0" constant="false"/>
@@ -66,6 +88,8 @@
       <parameter id="base_amount" value="0.0" constant="true"/>
       <parameter id="output_amount" value="0.0" constant="true"/>
     </listOfParameters>
+    <listOfInitialAssignments>
+    </listOfInitialAssignments>
     <listOfRules>
       <rateRule variable="activator">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">

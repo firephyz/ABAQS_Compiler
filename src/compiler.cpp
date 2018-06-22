@@ -33,10 +33,11 @@ namespace abaqs {
 
     // Preprocess SBML file and get all the data
     // present inside the compiler.
-    Compiler::processFunctions();
-    Compiler::processSpecies();
-    Compiler::processParameters();
-    Compiler::processRules();
+    processFunctions();
+    processSpecies();
+    processParameters();
+    processInitAssignments();
+    processRules();
 
     for(auto& func : functions) {
       std::cout << func << std::endl;
@@ -47,6 +48,19 @@ namespace abaqs {
     }
 
     output.generate();
+  }
+
+  void
+  Compiler::processInitAssignments()
+  {
+    const libsbml::ListOfInitialAssignments * assigns =
+      model->getListOfInitialAssignments();
+    
+    for(uint i = 0; i < assigns->size(); ++i) {
+      const libsbml::InitialAssignment * init = assigns->get(i);
+
+      Compiler::assigns.push_back(CompilerInitAssignment(*init));
+    }
   }
 
   void

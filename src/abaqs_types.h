@@ -85,6 +85,14 @@ namespace abaqs {
   std::ostream& operator<<(std::ostream& out,
       const CompilerFunction& func);
 
+  class CompilerInitAssignment {
+  public:
+    std::string var_name;
+    AST ast;
+
+    CompilerInitAssignment(const libsbml::InitialAssignment& init);
+  };
+
   class FunctionList : public std::vector<CompilerFunction> {
   public:
     void record(const libsbml::FunctionDefinition& func);

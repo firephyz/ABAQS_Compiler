@@ -18,6 +18,7 @@ namespace abaqs {
     SpeciesRecord species;
     ParameterList parameters;
     FunctionList functions;
+    std::vector<CompilerInitAssignment> assigns;
     std::vector<CompilerRule> rules;
 
     RuleProcessor rproc;
@@ -31,6 +32,7 @@ namespace abaqs {
     void run();
     void processSpecies();
     void processParameters();
+    void processInitAssignments();
     void processRules();
     void processFunctions();
 
