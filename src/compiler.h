@@ -2,7 +2,6 @@
 #define COMPILER_INCLUDED
 
 #include "abaqs_arch.h"
-#include "var_dep_graph.h"
 #include "rule_processor.h"
 #include "verilog_writer.h"
 #include "rule.h"
