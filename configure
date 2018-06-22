@@ -12,9 +12,23 @@ if [ $# -eq 0 ]; then
     export CXX=/usr/bin/g++-7
     cmake ../
 elif [ "$1" = "make" ]; then
+    # Handle the case if we pass the -j flag to make
+    case $2 in
+    *-j*)
+        JFLAG=$2
+        ;;
+    *)
+        if [ -z $2 ]; then
+            JFLAG=""
+        else
+            echo "Invalid flag to make."
+            exit
+        fi
+    esac
+
     echo "Building project..."
     cd build
-    make
+    make $JFLAG
 
     cd ../
     mkdir -p bin
