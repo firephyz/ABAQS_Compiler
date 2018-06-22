@@ -134,6 +134,12 @@ Problems with the Granuloma paper related to simulating it on ABAQS.
   - Many random variables and occurrences.
 
 <<< 2018-06-20 >>>
+
 verilog library, new model, supercomputer, senior design, papers
 
-leg up
+leg up from University of Toronto. Might have some useful Verilog generating code.
+
+<<< 2018-06-22 >>>
+
+TODO: The types CompilerFunction, CompilerRule and CompilerInitAssign all share a
+        common structure (name, ast, printable). Show this in the code.

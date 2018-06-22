@@ -4,7 +4,7 @@
 #include "abaqs_arch.h"
 #include "rule_processor.h"
 #include "verilog_writer.h"
-#include "rule.h"
+#include "abaqs_types.h"
 
 #include <sbml/SBMLTypes.h>
 
@@ -15,8 +15,8 @@
 namespace abaqs {
   class Compiler {
     SpeciesRecord species;
-    ParameterList parameters;
-    FunctionList functions;
+    std::vector<CompilerParameter> parameters;
+    std::vector<CompilerFunction> functions;
     std::vector<CompilerInitAssignment> assigns;
     std::vector<CompilerRule> rules;
 
@@ -34,6 +34,8 @@ namespace abaqs {
     void processInitAssignments();
     void processRules();
     void processFunctions();
+
+    void record_parameter(const libsbml::Parameter& param);
 
     friend class RuleProcessor;
     friend class AST;

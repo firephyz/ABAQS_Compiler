@@ -88,7 +88,7 @@ namespace abaqs {
 
       check_valid_parameter(*p);
 
-      parameters.record(*p);
+      record_parameter(*p);
     }
 
     //TODO
@@ -118,7 +118,41 @@ namespace abaqs {
 
       check_valid_function(*func);
 
-      functions.record(*func);
+      CompilerFunction abaqs_func(*func);
+
+      if(std::find(functions.begin(),
+                   functions.end(),
+                   abaqs_func) != functions.end()) {
+        throw InvalidABAQSDocument(
+          "Redeclaration of function \'" + abaqs_func.var_name + "\'.");
+      }
+
+      functions.push_back(std::move(abaqs_func));
     }
+  }
+
+  void
+  Compiler::record_parameter(const libsbml::Parameter& param)
+  {
+    CompilerParameter par;
+    const std::string name = param.getId();
+    const bool constant = param.getConstant();
+
+    if(!param.isSetValue()) {
+      par = CompilerParameter(name, constant);
+    }
+    else {
+      const double value = param.getValue();
+      par = CompilerParameter(name, value, constant);
+    }
+
+    if(std::find(parameters.begin(),
+                 parameters.end(),
+                 par) != parameters.end()) {
+      throw InvalidABAQSDocument(
+        "Redeclaration of parameter \'" + name + "\'.");
+    }
+
+    parameters.push_back(std::move(par));
   }
 }

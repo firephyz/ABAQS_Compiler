@@ -7,6 +7,11 @@
 // CompilerFunction and others.
 #include "ast_base.h"
 
+// Include more specific types too
+// ast_base.h needs to be included before this
+#include "species.h"
+#include "rule.h"
+
 #include <sbml/SBMLTypes.h>
 
 #include <vector>
@@ -16,34 +21,6 @@
 
 namespace abaqs {
 
-  class CompilerVar {
-    //TODO Internal compiler variable. Not a parameter.
-  };
-
-  class CompilerSpecies {
-  public:
-    CompilerSpecies(const std::string name);
-    bool operator==(const CompilerSpecies& sp);
-    std::string name;
-
-    enum class SpeciesType {
-      cell,
-      autoinducer
-    };
-  };
-
-  class SpeciesRecord {
-  public:
-    void record(const libsbml::Species& sp);
-    void storeCompilerSpecies(const std::string name,
-      const CompilerSpecies::SpeciesType type);
-
-    // Shouldn't have hundreds of cells and autoinducers.
-    // Vectors should be plenty efficient.
-    std::vector<CompilerSpecies> cells;
-    std::vector<CompilerSpecies> autoinducers;
-  };
-
   class CompilerParameter {
   public:
     CompilerParameter(const std::string name,
@@ -51,20 +28,22 @@ namespace abaqs {
                       const bool is_constant);
     CompilerParameter(const std::string name,
                             const bool is_constant);
-    // Equality for parameters only cares if the name matches
+    CompilerParameter(CompilerParameter&& param);
+    CompilerParameter();
+    CompilerParameter& operator=(
+      const CompilerParameter& param) = delete;
+    CompilerParameter& operator=(
+      CompilerParameter&& param) = default;
+    // Check if names match
     bool operator==(const CompilerParameter& p);
 
-    const std::string name;
+    std::string name;
     double value;
-    const bool is_constant;
+    bool is_constant;
     bool value_is_valid;
   };
 
-  class ParameterList : public std::vector<CompilerParameter> {
-  public:
-    void record(const libsbml::Parameter& p);
-  };
-
+  //TODO Revise comment
   // When compiler function is used by the RuleProcessor to parse the
   // rule math defintion, we will simply 'splice' the ASTNode (containing
   // the entire math definition of a given function) into the
@@ -91,11 +70,6 @@ namespace abaqs {
     AST ast;
 
     CompilerInitAssignment(const libsbml::InitialAssignment& init);
-  };
-
-  class FunctionList : public std::vector<CompilerFunction> {
-  public:
-    void record(const libsbml::FunctionDefinition& func);
   };
 }
 
