@@ -10,8 +10,9 @@ namespace abaqs {
 
   Compiler::Compiler(const libsbml::SBMLDocument& doc,
     const Architecture& arch)
-    : rproc {*this},
-      arch {&arch}
+    : rproc {*this}
+    , output {*this}
+    ,  arch {&arch}
   {
     model = doc.getModel();
     // libsbml seems to not detect some errors.
@@ -39,15 +40,7 @@ namespace abaqs {
     processInitAssignments();
     processRules();
 
-    for(auto& func : functions) {
-      std::cout << func << std::endl;
-    }
-
-    for(auto& rule : rules) {
-      std::cout << rule << std::endl; 
-    }
-
-    output.generate();
+    output.run();
   }
 
   void

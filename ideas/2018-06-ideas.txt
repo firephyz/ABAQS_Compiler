@@ -141,5 +141,8 @@ leg up from University of Toronto. Might have some useful Verilog generating cod
 
 <<< 2018-06-22 >>>
 
-TODO: The types CompilerFunction, CompilerRule and CompilerInitAssign all share a
-        common structure (name, ast, printable). Show this in the code.
+TODO: The types CompilerFunction, CompilerRule and CompilerInitAssign
+      all share a common structure (name, ast, printable). Show
+      this in the code.
+TODO: If the directory out/ doesn't exist for the output files,
+      have the program create it. Will probably use boost.

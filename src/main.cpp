@@ -47,6 +47,10 @@ int main(int argc, char * argv[]) {
     std::cerr << failure.what() << std::endl;
     return 1;
   }
+  catch (abaqs::CompilerRuntimeError& error) {
+    std::cerr << error.what() << std::endl;
+    return 1;
+  }
   catch(...) {
     std::cerr << "Unknown exception.\n";
     return 1;
