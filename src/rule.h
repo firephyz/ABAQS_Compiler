@@ -15,12 +15,10 @@ namespace abaqs {
   };
 
   class CompilerRule {
-  private:
-    AST * convertSBMLToAST(const libsbml::ASTNode * rule);
   public:
     const RuleType type;
     std::string var_name;
-    std::unique_ptr<AST> math;
+    AST math;
     
     CompilerRule(const RuleType type,
                  const std::string&& name,
@@ -35,10 +33,6 @@ namespace abaqs {
 
   std::ostream& operator<<(
       std::ostream& out, const CompilerRule& tree);
-
-  // Determines ASTBuiltinType from libsbml type
-  ASTBuiltinType determineBuiltinType(
-    const libsbml::ASTNodeType_t type);
 }
 
 #endif

@@ -1,6 +1,23 @@
 #ifndef AST_INCLUDED
 #define AST_INCLUDED
 
+#include <sbml/SBMLTypes.h>
+
+// Must include this little portion first so ast_base.h
+// can know the ASTType type.
+namespace abaqs {
+    enum class ASTType {
+    None,
+    Number,
+    Parameter,
+    BuiltinFunction,
+    UserFunction,
+    Apply
+  };
+}
+
+#include "ast_base.h"
+
 #include "abaqs_types.h"
 
 #include <ostream>
@@ -9,38 +26,12 @@
 
 namespace abaqs {
 
-  enum class ASTType {
-    None,
-    Number,
-    Parameter,
-    BuiltinFunction,
-    UserFunction,
-    Apply
-  };
-
   enum class ASTBuiltinType {
     plus,
     times
   };
 
-  class AST {
-  public:
-    const ASTType type;
-    
-    AST();
-    AST(const ASTType type);
-    AST(const AST& tree) = delete;
-    AST(AST&& tree) = default;
-
-    virtual std::string to_string() const;
-
-    friend std::ostream& operator<<(
-      std::ostream& out, const AST& tree);
-  };
-
-  std::ostream& operator<<(std::ostream& out, const AST& tree);
-
-  class ASTNumber : public AST {
+  class ASTNumber : public ASTNode {
   public:
     const double value;
 
@@ -49,7 +40,7 @@ namespace abaqs {
     std::string to_string() const;
   };
 
-  class ASTParameter : public AST {
+  class ASTParameter : public ASTNode {
   public:
     const std::string name;
     const CompilerParameter * param;
@@ -59,10 +50,10 @@ namespace abaqs {
     std::string to_string() const;
   };
 
-  class ASTFunction : public AST {
+  class ASTFunction : public ASTNode {
   public:
     const std::string name;
-    std::vector<AST *> children;
+    std::vector<ASTNode *> children;
     ASTFunction(const std::string& name,
       const ASTType type);
   };
@@ -88,17 +79,10 @@ namespace abaqs {
     std::string to_string() const;
   };
 
-  // class ASTApply : public AST {
-  // private:
-  //   const AST func;
-  //   const std::vector<AST> args;
-  // public:
-  //   ASTApply(
-  //     const AST func,
-  //     std::vector<AST> args);
-  //   ASTFunction& getFunction();
-  //   std::vector<AST> getArgs();
-  // };
+  ASTNode * convertSBMLToAST(const libsbml::ASTNode * rule);
+  // Determines ASTBuiltinType from libsbml type
+  ASTBuiltinType determineBuiltinType(
+    const libsbml::ASTNodeType_t type);
 }
 
 #endif

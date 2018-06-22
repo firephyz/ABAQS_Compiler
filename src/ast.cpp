@@ -1,28 +1,47 @@
 #include "ast.h"
 #include "abaqs_types.h"
+#include "doc_checks.h"
+
+#include <sbml/SBMLTypes.h>
 
 #include <ostream>
 #include <string>
 
 namespace abaqs {
 
-  AST::AST()
-    : type(ASTType::None)
+  AST::AST(const libsbml::ASTNode * node)
+    : node(std::unique_ptr<ASTNode>(
+        convertSBMLToAST(node)))
   {}
 
-  AST::AST(const ASTType type)
-    : type(type)
+  AST::AST(AST&& tree)
+    : node(std::move(tree.node))
   {}
 
   std::ostream&
   operator<<(std::ostream& out, const AST& tree)
+  {
+    out << *tree.node;
+    return out;
+  }
+
+  ASTNode::ASTNode()
+    : type(ASTType::None)
+  {}
+
+  ASTNode::ASTNode(const ASTType type)
+    : type(type)
+  {}
+
+  std::ostream&
+  operator<<(std::ostream& out, const ASTNode& tree)
   {
     out << tree.to_string();
     return out;
   }
 
   std::string
-  AST::to_string() const
+  ASTNode::to_string() const
   {
     return "";
   }
@@ -30,7 +49,7 @@ namespace abaqs {
   ASTFunction::ASTFunction(
     const std::string& name,
     const ASTType type)
-    : AST(type)
+    : ASTNode(type)
     , name(name)
   {}
 
@@ -72,20 +91,9 @@ namespace abaqs {
     result += ")";
     return result;
   }
-
-  // std::ostream&
-  // ASTUserFunction::operator<<(std::ostream& out)
-  // {
-  //   out << "(" << name;
-  //   for(AST& tree : children) {
-  //     out << " " << tree;
-  //   }
-  //   out << ")";
-  //   return out;
-  // }
   
   ASTParameter::ASTParameter(const std::string& name)
-    : AST(ASTType::Parameter)
+    : ASTNode(ASTType::Parameter)
     , name(name)
     , param(nullptr)
   {}
@@ -97,7 +105,7 @@ namespace abaqs {
   }
 
   ASTNumber::ASTNumber(const double value)
-    : AST(ASTType::Number)
+    : ASTNode(ASTType::Number)
     , value(value)
   {}
 
@@ -105,5 +113,68 @@ namespace abaqs {
   ASTNumber::to_string() const
   {
     return std::to_string(value);
+  }
+
+  // Disregard the next block comment. Is no longer accurate
+  // but it's still a question I need to ask.
+  /* Ask someone more knowledgable in c++ about this.
+     I would really like to return a temporary rvalue from this
+     function so that the caller can move the contents out and store
+     it somewhere nice. This though, requires us to put a std::move
+     on every return from this function.
+     Instead, we return a normal AST and let the caller call std::move. This relies on the compiler performing RVO though.
+  */
+  // Only meant to be called in constructor init
+  ASTNode *
+  convertSBMLToAST(const libsbml::ASTNode * rule)
+  {
+    if(rule->isFunction()) {
+      ASTUserFunction * func = new ASTUserFunction(rule->getName());
+      
+      for(uint i = 0; i < rule->getNumChildren(); ++i) {
+        func->children.push_back(convertSBMLToAST(rule->getChild(i)));
+      }
+
+      return func;
+    }
+    else if(rule->isOperator()) {
+      ASTBuiltinFunction * op = new ASTBuiltinFunction(
+        rule->getOperatorName(),
+        determineBuiltinType(rule->getType()));
+
+      for(uint i = 0; i < rule->getNumChildren(); ++i) {
+        op->children.push_back(convertSBMLToAST(rule->getChild(i)));
+      }
+
+      return op;
+    }
+    else if(rule->isName()) {
+      return new ASTParameter(rule->getName());
+    }
+    else if(rule->isNumber()) {
+      return new ASTNumber(rule->getValue());
+    }
+    else {
+      throw InvalidABAQSDocument(
+        "Invalid math node: " + 
+        std::string(libsbml::SBML_formulaToString(rule)));
+    }
+
+    // Should never get here
+    return new ASTNode(ASTType::None);
+  }
+
+  ASTBuiltinType
+  determineBuiltinType(const libsbml::ASTNodeType_t type)
+  {
+    switch(type) {
+      case libsbml::ASTNodeType_t::AST_PLUS:
+        return ASTBuiltinType::plus;
+      case libsbml::ASTNodeType_t::AST_TIMES:
+        return ASTBuiltinType::times;
+      default:
+        throw InvalidABAQSDocument(
+          "Unknown libsbml math type: " + type);
+    }
   }
 }
