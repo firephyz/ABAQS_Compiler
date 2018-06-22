@@ -3,6 +3,10 @@
 
 #include <sbml/SBMLTypes.h>
 
+#include <ostream>
+#include <string>
+#include <vector>
+
 // Must include this little portion first so ast_base.h
 // can know the ASTType type.
 namespace abaqs {
@@ -16,19 +20,25 @@ namespace abaqs {
   };
 }
 
+// ast.h is being included directly. Supply all remaining decls
+#ifndef AST_BASE_INCLUDED
+
 #include "ast_base.h"
-
 #include "abaqs_types.h"
-
-#include <ostream>
-#include <string>
-#include <vector>
 
 namespace abaqs {
 
   enum class ASTBuiltinType {
     plus,
-    times
+    times,
+    divide,
+    log,
+    // Relational operators
+    eq,
+    gt,
+    lt,
+    geq,
+    leq
   };
 
   class ASTNumber : public ASTNode {
@@ -84,5 +94,7 @@ namespace abaqs {
   ASTBuiltinType determineBuiltinType(
     const libsbml::ASTNodeType_t type);
 }
+
+#endif
 
 #endif

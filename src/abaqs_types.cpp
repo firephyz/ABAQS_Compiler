@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <ostream>
 
 namespace abaqs {
 
@@ -117,14 +118,23 @@ namespace abaqs {
   }
 
   CompilerFunction::CompilerFunction(const libsbml::FunctionDefinition& func)
-  : name {func.getId()},
-    node {func.getBody()}
+  : var_name {func.getId()},
+    ast {AST(func.getBody())}
   {}
 
   bool
   CompilerFunction::operator==(const CompilerFunction& func)
   {
-    return name == func.name;
+    return var_name == func.var_name;
+  }
+
+  std::ostream&
+  operator<<(std::ostream& out, const CompilerFunction& func)
+  {
+    out << "FUNCTION: {\n\t" << func.var_name
+      << "\n\t" << func.ast << "\n}\n";
+
+    return out;
   }
 
   void
@@ -134,7 +144,7 @@ namespace abaqs {
 
     if(std::find(begin(), end(), abaqs_func) != end()) {
       throw InvalidABAQSDocument(
-        "Redeclaration of function \'" + abaqs_func.name + "\'.");
+        "Redeclaration of function \'" + abaqs_func.var_name + "\'.");
     }
 
     push_back(std::move(abaqs_func));

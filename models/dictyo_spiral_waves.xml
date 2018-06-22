@@ -36,19 +36,7 @@
             <bvar>
               <ci> x </ci>
             </bvar>
-            <piecewise>
-              <piece>
-                <cn> 1.0 </cn>
-                <apply>
-                  <gt/>
-                  <ci> x </ci>
-                  <cn> 0 </cn>
-                </apply>
-              </piece>
-              <otherwise>
-                <cn> 0 </cn>
-              </otherwise>
-            </piecewise>
+            <cn> 5 </cn>
           </lambda>
         </math>
       </functionDefinition>

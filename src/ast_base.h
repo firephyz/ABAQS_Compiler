@@ -6,6 +6,9 @@
 
 #define AST_BASE_INCLUDED
 
+// Only the ASTType info
+#include "ast.h"
+
 #include <sbml/SBMLTypes.h>
 
 #include <memory>

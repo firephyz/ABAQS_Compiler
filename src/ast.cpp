@@ -128,7 +128,14 @@ namespace abaqs {
   ASTNode *
   convertSBMLToAST(const libsbml::ASTNode * rule)
   {
-    if(rule->isFunction()) {
+    if(rule->isPiecewise()) {
+      // for(uint i = 0; i < rule->getNumChildren(); ++i) {
+      //   std::cout << libsbml::SBML_formulaToString(rule->getChild(i)) << std::endl;
+      // }
+      throw InvalidABAQSDocument(
+        "Piecewise functions not currently supported.");
+    }
+    else if(rule->isFunction()) {
       ASTUserFunction * func = new ASTUserFunction(rule->getName());
       
       for(uint i = 0; i < rule->getNumChildren(); ++i) {
@@ -137,9 +144,20 @@ namespace abaqs {
 
       return func;
     }
-    else if(rule->isOperator()) {
+    else if(rule->isOperator() ||
+            rule->isRelational() ||
+            rule->isLogical()) {
+      std::string name;
+
+      if(rule->isRelational()) {
+        name += rule->getName();
+      }
+      else {
+        name += rule->getOperatorName();
+      }
+
       ASTBuiltinFunction * op = new ASTBuiltinFunction(
-        rule->getOperatorName(),
+        name,
         determineBuiltinType(rule->getType()));
 
       for(uint i = 0; i < rule->getNumChildren(); ++i) {
@@ -172,9 +190,23 @@ namespace abaqs {
         return ASTBuiltinType::plus;
       case libsbml::ASTNodeType_t::AST_TIMES:
         return ASTBuiltinType::times;
+      case libsbml::ASTNodeType_t::AST_DIVIDE:
+        return ASTBuiltinType::divide;
+      case libsbml::ASTNodeType_t::AST_FUNCTION_LOG:
+        return ASTBuiltinType::log;
+      case libsbml::ASTNodeType_t::AST_RELATIONAL_EQ:
+        return ASTBuiltinType::eq;
+      case libsbml::ASTNodeType_t::AST_RELATIONAL_GT:
+        return ASTBuiltinType::gt;
+      case libsbml::ASTNodeType_t::AST_RELATIONAL_LT:
+        return ASTBuiltinType::lt;
+      case libsbml::ASTNodeType_t::AST_RELATIONAL_GEQ:
+        return ASTBuiltinType::geq;
+      case libsbml::ASTNodeType_t::AST_RELATIONAL_LEQ:
+        return ASTBuiltinType::leq;
       default:
         throw InvalidABAQSDocument(
-          "Unknown libsbml math type: " + type);
+          "Unknown libsbml math type: " + std::to_string(type));
     }
   }
 }

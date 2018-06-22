@@ -2,11 +2,17 @@
 
 #define ABAQS_TYPES_INCLUDED
 
+// Don't include all of the compiler specfic ASTNodes.
+// This will cause circular dependencies with
+// CompilerFunction and others.
+#include "ast_base.h"
+
 #include <sbml/SBMLTypes.h>
 
 #include <vector>
 #include <memory>
 #include <string>
+#include <ostream>
 
 namespace abaqs {
 
@@ -69,9 +75,15 @@ namespace abaqs {
     CompilerFunction(const libsbml::FunctionDefinition& func);
     bool operator==(const CompilerFunction& func);
 
-    std::string name;
-    const libsbml::ASTNode * node;
+    std::string var_name;
+    AST ast;
+
+    friend std::ostream& operator<<(std::ostream& out,
+      const CompilerFunction& func);
   };
+
+  std::ostream& operator<<(std::ostream& out,
+      const CompilerFunction& func);
 
   class FunctionList : public std::vector<CompilerFunction> {
   public:
