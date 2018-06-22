@@ -91,8 +91,26 @@ namespace abaqs {
       record_parameter(*p);
     }
 
-    //TODO
-    // We need to ensure parameters required by ABAQS are present.
+    // See ABAQS_Source/src/cell_rules.v to get more understanding
+    // for the parameters.
+    std::vector<std::string> req_params = {
+      "Q_OUT",
+      "MOVE_DIR",
+      "MOVE_RQ"
+    };
+    for(auto& str : req_params) {
+      const auto& element = std::find_if(
+        parameters.begin(),
+        parameters.end(),
+        [str](CompilerParameter& param) {
+          return param.name == str;
+      });
+
+      if(element == parameters.end()) {
+        throw InvalidABAQSDocument(
+          "Missing ABAQS required parameter: " + str); 
+      }
+    }
   }
 
   void
