@@ -1,6 +1,8 @@
 #ifndef VERILOG_INCLUDED
 #define VERILOG_INCLUDED
 
+#include "rule.h"
+
 #include <string>
 #include <stdexcept>
 
@@ -16,7 +18,7 @@ namespace abaqs {
     std::string generateMoveDir();
     std::string generateMoveRq();
     std::string generateQuantity();
-    std::string generateOutState();
+    // std::string generateOutState();
 
   public:
     Compiler& compiler;
@@ -24,12 +26,6 @@ namespace abaqs {
     VerilogWriter(Compiler& comp);
 
     void run();
-  };
-
-  class CompilerRuntimeError : public std::runtime_error
-  {
-  public:
-    CompilerRuntimeError(std::string str);
   };
 
   void wrapInCombBlock(std::string& result);

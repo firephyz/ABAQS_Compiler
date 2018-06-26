@@ -166,4 +166,28 @@ namespace abaqs {
 
     parameters.push_back(std::move(par));
   }
+
+  const CompilerRule&
+  Compiler::getRule(const std::string rule_name)
+  {
+    for(const CompilerRule& rule : rules) {
+      if(rule.var_name == rule_name) {
+        return rule;
+      }
+    }
+
+    throw CompilerRuntimeError(
+      "Cannot find definition of rule \'" +
+      rule_name + "\'.");
+  }
+
+  std::string
+  Compiler::compileRule(const CompilerRule& rule)
+  {
+    return "Test\n";
+  }
+
+  CompilerRuntimeError::CompilerRuntimeError(std::string str)
+  : std::runtime_error("Runtime error: " + str)
+  {}
 }

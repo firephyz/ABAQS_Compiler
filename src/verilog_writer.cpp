@@ -1,5 +1,6 @@
 #include "verilog_writer.h"
 #include "compiler.h"
+#include "rule.h"
 
 #include <vector>
 #include <string>
@@ -51,7 +52,7 @@ namespace abaqs {
         "Output directory \'out/\' does not exist. Create it.");
     }
     for(std::string& str : parts) {
-      out << str << "\n";
+      out << str;
     }
     out.close();
 
@@ -62,7 +63,7 @@ namespace abaqs {
   VerilogWriter::gatherNextTemplateSection(
     std::ifstream& templ)
   {
-    const std::string seperator {"\n<<<>>>\n\n"};
+    const std::string seperator {"<<<>>>\n\n"};
 
     std::string result;
 
@@ -86,9 +87,9 @@ namespace abaqs {
   {
     std::string result {"/*\n * Generated code\n */\n\n"};
 
-    result += generateMoveDir();
-    result += generateMoveRq();
-    result += generateOutState();
+    //result += generateMoveDir();
+    //result += generateMoveRq();
+    // result += generateOutState();
     result += generateQuantity();
 
     return std::move(result);
@@ -99,7 +100,8 @@ namespace abaqs {
   {
     std::string comment {"/* move_direction */\n"};
 
-    std::string result {"test\n"};
+    const CompilerRule& rule = compiler.getRule("MOVE_DIR");
+    std::string result = compiler.compileRule(rule);
     wrapInCombBlock(result);
 
     return std::move(comment + result);
@@ -110,37 +112,35 @@ namespace abaqs {
   {
     std::string comment {"/* move_rq */\n"};
 
-    std::string result {"test\n"};
+    const CompilerRule& rule = compiler.getRule("MOVE_RQ");
+    std::string result = compiler.compileRule(rule);
     wrapInCombBlock(result);
 
     return std::move(comment + result);
   }
 
-  std::string
-  VerilogWriter::generateOutState()
-  {
-    std::string comment {"/* cell_state_out */\n"};
+  // std::string
+  // VerilogWriter::generateOutState()
+  // {
+  //   std::string comment {"/* cell_state_out */\n"};
 
-    std::string result {"test\n"};
-    wrapInCombBlock(result);
+  //   std::string result {"test\n"};
+  //   wrapInCombBlock(result);
 
-    return std::move(comment + result);
-  }
+  //   return std::move(comment + result);
+  // }
 
   std::string
   VerilogWriter::generateQuantity()
   {
     std::string comment {"/* quantity */\n"};
 
-    std::string result {"test\n"};
+    const CompilerRule& rule = compiler.getRule("Q_OUT");
+    std::string result = compiler.compileRule(rule);
     wrapInSeqBlock(result);
 
     return std::move(comment + result);
   }
-
-  CompilerRuntimeError::CompilerRuntimeError(std::string str)
-  : std::runtime_error("Runtime error: " + str)
-  {}
 
   void
   wrapInCombBlock(std::string& result)
@@ -156,7 +156,7 @@ namespace abaqs {
   {
     std::string prefix {
       "always@(posedge clock or negedge "
-      "reset_n) beginalways@(*) begin\n"};
+      "reset_n) begin\n"};
     std::string postfix {"end\n\n"};
     result.insert(0, prefix);
     result.insert(result.length(), postfix);

@@ -34,12 +34,20 @@ namespace abaqs {
     void processInitAssignments();
     void processRules();
     void processFunctions();
-
     void record_parameter(const libsbml::Parameter& param);
+
+    const CompilerRule& getRule(const std::string rule_name);
+    std::string compileRule(const CompilerRule& rule);
 
     friend class RuleProcessor;
     friend class AST;
     friend class VerilogWriter;
+  };
+
+  class CompilerRuntimeError : public std::runtime_error
+  {
+  public:
+    CompilerRuntimeError(std::string str);
   };
 }
 
