@@ -2,7 +2,7 @@
  *  with the license below.
  */
 
-<<<------------------------------------->>>
+<<<>>>
 
 /** @module : cell_rules
  *  @author : Adaptive & Secure Computing Systems (ASCS) Laboratory
@@ -26,7 +26,7 @@
  *  THE SOFTWARE.
  */
 
-<<<------------------------------------->>>
+<<<>>>
 
 module cell_rules #(
   parameter BIT_WIDTH      = 32,                   // Bit width of the data
@@ -36,7 +36,7 @@ module cell_rules #(
   parameter RULE_DELAY     = 1                     // Number of clock cycles needed for valid rule output
 )(
 
-<<<------------------------------------->>>
+<<<>>>
 
   input clock,
   input reset_n,
@@ -52,7 +52,7 @@ module cell_rules #(
 
 );
 
-<<<------------------------------------->>>
+<<<>>>
 
 // This is the array that holds NUM_REGS many variables, each with a bit width
 // of BIT_WIDTH.
@@ -70,6 +70,7 @@ for(i = 0; i < NUM_REGS; i=i+1) begin : connect_cell_state
 end
 endgenerate
 
-<<<------------------------------------->>>
+<<<>>>
+
 
 endmodule
