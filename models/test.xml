@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
+  <model id="dictyostelium_qs">
+    <listOfFunctionDefinitions>
+    </listOfFunctionDefinitions>
+    <listOfCompartments>
+      <compartment id="SIM_SPACE"		   constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="Q_IN" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false"	constant="false"/>
+      <species id="CELL" compartment="SIM_SPACE" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+    </listOfSpecies>
+    <listOfParameters>
+      <!-- Parameters required by ABAQS -->
+      <parameter id="Q_OUT" constant="false"/>
+      <parameter id="MOVE_DIR" constant="false"/>
+      <parameter id="MOVE_RQ" constant="false"/>
+    </listOfParameters>
+    <listOfInitialAssignments>
+    </listOfInitialAssignments>
+    <listOfRules>
+      <assignmentRule variable="Q_OUT">
+        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
+          <cn> 5 </cn>
+        </math>
+      </assignmentRule>
+      <assignmentRule variable="MOVE_DIR">
+        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
+          <cn> 0 </cn>
+        </math>
+      </assignmentRule>
+      <assignmentRule variable="MOVE_RQ">
+        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
+          <cn> 0 </cn>
+        </math>
+      </assignmentRule>
+    </listOfRules>
+  </model>
+</sbml>

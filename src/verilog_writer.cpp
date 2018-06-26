@@ -24,8 +24,8 @@ namespace abaqs {
      * 2 - Module and parameter declarations
      * 3 - IO declarations
      * 4 - Setup code
-     * 6 - Generated code
-     * 7 - end
+     * 5 - Generated code
+     * 6 - end
      */
     std::vector<std::string> parts;
     while(!templ.eof()) {
@@ -84,10 +84,81 @@ namespace abaqs {
   std::string
   VerilogWriter::generate()
   {
-    return std::string("Hello world.");
+    std::string result {"/*\n * Generated code\n */\n\n"};
+
+    result += generateMoveDir();
+    result += generateMoveRq();
+    result += generateOutState();
+    result += generateQuantity();
+
+    return std::move(result);
+  }
+
+  std::string
+  VerilogWriter::generateMoveDir()
+  {
+    std::string comment {"/* move_direction */\n"};
+
+    std::string result {"test\n"};
+    wrapInCombBlock(result);
+
+    return std::move(comment + result);
+  }
+
+  std::string
+  VerilogWriter::generateMoveRq()
+  {
+    std::string comment {"/* move_rq */\n"};
+
+    std::string result {"test\n"};
+    wrapInCombBlock(result);
+
+    return std::move(comment + result);
+  }
+
+  std::string
+  VerilogWriter::generateOutState()
+  {
+    std::string comment {"/* cell_state_out */\n"};
+
+    std::string result {"test\n"};
+    wrapInCombBlock(result);
+
+    return std::move(comment + result);
+  }
+
+  std::string
+  VerilogWriter::generateQuantity()
+  {
+    std::string comment {"/* quantity */\n"};
+
+    std::string result {"test\n"};
+    wrapInSeqBlock(result);
+
+    return std::move(comment + result);
   }
 
   CompilerRuntimeError::CompilerRuntimeError(std::string str)
   : std::runtime_error("Runtime error: " + str)
   {}
+
+  void
+  wrapInCombBlock(std::string& result)
+  {
+    std::string prefix {"always@(*) begin\n"};
+    std::string postfix {"end\n\n"};
+    result.insert(0, prefix);
+    result.insert(result.length(), postfix);
+  }
+
+  void
+  wrapInSeqBlock(std::string& result)
+  {
+    std::string prefix {
+      "always@(posedge clock or negedge "
+      "reset_n) beginalways@(*) begin\n"};
+    std::string postfix {"end\n\n"};
+    result.insert(0, prefix);
+    result.insert(result.length(), postfix);
+  }
 }

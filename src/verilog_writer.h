@@ -13,6 +13,10 @@ namespace abaqs {
   class VerilogWriter {
     std::string gatherNextTemplateSection(std::ifstream& templ);
     std::string generate();
+    std::string generateMoveDir();
+    std::string generateMoveRq();
+    std::string generateQuantity();
+    std::string generateOutState();
 
   public:
     Compiler& compiler;
@@ -27,6 +31,9 @@ namespace abaqs {
   public:
     CompilerRuntimeError(std::string str);
   };
+
+  void wrapInCombBlock(std::string& result);
+  void wrapInSeqBlock(std::string& result);
 }
 
 #endif

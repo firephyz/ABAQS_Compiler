@@ -146,3 +146,7 @@ TODO: The types CompilerFunction, CompilerRule and CompilerInitAssign
       this in the code.
 TODO: If the directory out/ doesn't exist for the output files,
       have the program create it. Will probably use boost.
+
+<<< 2018-06-26 >>>
+
+Ask Peter about having multiple sequential and combinatorial blocks.
