@@ -1,7 +1,7 @@
 #ifndef VERILOG_INCLUDED
 #define VERILOG_INCLUDED
 
-#include "rule.h"
+#include "ast.h"
 
 #include <string>
 #include <stdexcept>

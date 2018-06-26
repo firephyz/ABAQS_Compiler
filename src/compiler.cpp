@@ -3,6 +3,8 @@
 #include "doc_checks.h"
 #include "rule_processor.h"
 #include "verilog_writer.h"
+#include "rule.h"
+#include "inter_rep.h"
 
 #include <sbml/SBMLTypes.h>
 
@@ -184,7 +186,22 @@ namespace abaqs {
   std::string
   Compiler::compileRule(const CompilerRule& rule)
   {
-    return "Test\n";
+    std::string result;
+
+    const InterRep ir(*this, rule.math);
+    for(auto& statement : ir.statements) {
+      result += statement.toString() + "\n";
+    }
+
+    // Final variable assignment isn't included in the rule's ast
+    const IRStatement& last = 
+      ir.statements[ir.statements.size() - 1];
+    result += rule.var_name +
+              " = " +
+              last.target +
+              ";\n";
+    
+    return std::move(result);
   }
 
   CompilerRuntimeError::CompilerRuntimeError(std::string str)

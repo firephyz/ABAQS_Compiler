@@ -5,6 +5,7 @@
 #include "rule_processor.h"
 #include "verilog_writer.h"
 #include "abaqs_types.h"
+#include "rule.h"
 
 #include <sbml/SBMLTypes.h>
 

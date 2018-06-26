@@ -21,7 +21,15 @@
     <listOfRules>
       <assignmentRule variable="Q_OUT">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
-          <cn> 5 </cn>
+          <apply>
+            <eq/>
+            <apply>
+              <times/>
+              <cn> 2 </cn>
+              <cn> 5 </cn>
+            </apply>
+            <ci> b </ci>
+          </apply>
         </math>
       </assignmentRule>
       <assignmentRule variable="MOVE_DIR">

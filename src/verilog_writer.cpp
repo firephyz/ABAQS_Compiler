@@ -1,6 +1,6 @@
 #include "verilog_writer.h"
 #include "compiler.h"
-#include "rule.h"
+#include "ast.h"
 
 #include <vector>
 #include <string>

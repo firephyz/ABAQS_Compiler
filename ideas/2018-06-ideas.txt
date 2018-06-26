@@ -150,3 +150,14 @@ TODO: If the directory out/ doesn't exist for the output files,
 <<< 2018-06-26 >>>
 
 Ask Peter about having multiple sequential and combinatorial blocks.
+
+*** Should function be inlined or should they operate as seperate
+    little modules?
+*** Should we define each parameter in its own always block?
+
+TODO: generateSomething functions in verilog_writer.cpp show a
+      lot in common. Something could maybe be done about this.
+
+TODO: Say we have declared in a MathML block, this '<cn> test </cn>'.
+      SBML sees this as a number (of value 0) since we have
+      a <cn> tag. This is an error and we should find that.

@@ -30,6 +30,7 @@ namespace abaqs {
 
   enum class ASTBuiltinType {
     plus,
+    minus,
     times,
     divide,
     log,
@@ -91,7 +92,13 @@ namespace abaqs {
 
   ASTNode * convertSBMLToAST(const libsbml::ASTNode * rule);
   // Determines ASTBuiltinType from libsbml type
-  ASTBuiltinType determineBuiltinType(
+
+
+  struct builtin_info_t {
+    const std::string symbol;
+    const ASTBuiltinType type;
+  };
+  const struct builtin_info_t determineBuiltinInfo(
     const libsbml::ASTNodeType_t type);
 }
 
