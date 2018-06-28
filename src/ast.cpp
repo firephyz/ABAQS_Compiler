@@ -173,6 +173,9 @@ namespace abaqs {
     else if(rule->isNumber()) {
       return new ASTNumber(rule->getValue());
     }
+    else if(rule->isLambda()) {
+      throw InvalidABAQSDocument("Lambda's not currently supported.");
+    }
     else {
       throw InvalidABAQSDocument(
         "Invalid math node: " + 

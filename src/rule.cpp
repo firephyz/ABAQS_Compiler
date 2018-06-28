@@ -8,10 +8,10 @@
 namespace abaqs {
   CompilerRule::CompilerRule(const RuleType type,
                              const std::string&& name,
-                             const libsbml::ASTNode * math)
+                             const libsbml::ASTNode * sbml_math)
   : type {type},
     var_name {name},
-    math {AST(math)}
+    math {AST(sbml_math)}
   {}
 
   std::ostream&

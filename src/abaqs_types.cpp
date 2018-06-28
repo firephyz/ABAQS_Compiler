@@ -47,9 +47,22 @@ namespace abaqs {
   }
 
   CompilerFunction::CompilerFunction(const libsbml::FunctionDefinition& func)
-  : var_name {func.getId()},
-    ast {AST(func.getBody())}
-  {}
+    : var_name {func.getId()}
+    , body {AST(func.getBody())}
+    , args()
+  {
+    recordFunctionArgs(func.getMath());
+  }
+
+  void
+  CompilerFunction::recordFunctionArgs(
+    const libsbml::ASTNode * node)
+  {
+    for(uint i = 0; i < node->getNumBvars(); ++i) {
+      std::string name {node->getChild(i)->getName()};
+      args.push_back(std::move(name));
+    }
+  }
 
   bool
   CompilerFunction::operator==(const CompilerFunction& func)
@@ -61,7 +74,7 @@ namespace abaqs {
   operator<<(std::ostream& out, const CompilerFunction& func)
   {
     out << "FUNCTION: {\n\t" << func.var_name
-      << "\n\t" << func.ast << "\n}\n";
+      << "\n\t" << func.body << "\n}\n";
 
     return out;
   }

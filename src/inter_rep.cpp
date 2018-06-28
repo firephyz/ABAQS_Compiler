@@ -64,6 +64,19 @@ namespace abaqs {
           src1,
           func.name));
     }
+    else if(node->type == ASTType::UserFunction) {
+      const ASTUserFunction& func =
+        dynamic_cast<const ASTUserFunction&>(*node);
+      std::cout << func.func << std::endl;
+      std::cout << func.name << std::endl;
+      for(auto& child : func.children) {
+        std::cout << child->to_string() << std::endl;
+      }
+      for(auto& arg : func.func->args) {
+        std::cout << arg << std::endl;
+      }
+      throw CompilerRuntimeError("User function.");
+    }
     else {
       throw CompilerRuntimeError("AST convert error.");
     }

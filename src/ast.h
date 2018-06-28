@@ -15,8 +15,7 @@ namespace abaqs {
     Number,
     Parameter,
     BuiltinFunction,
-    UserFunction,
-    Apply
+    UserFunction
   };
 }
 
@@ -82,7 +81,7 @@ namespace abaqs {
 
   class ASTUserFunction : public ASTFunction {
   public:
-    CompilerFunction * func;
+    const CompilerFunction * func;
 
     ASTUserFunction(const std::string& name);
     ASTUserFunction(ASTUserFunction&& tree) = default;

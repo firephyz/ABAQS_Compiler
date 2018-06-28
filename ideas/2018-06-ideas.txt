@@ -154,6 +154,8 @@ Ask Peter about having multiple sequential and combinatorial blocks.
 *** Should function be inlined or should they operate as seperate
     little modules?
 *** Should we define each parameter in its own always block?
+*** Ask about email with Alan. Should you continue an email thread
+    or start a new one when it's a new subject.
 
 TODO: generateSomething functions in verilog_writer.cpp show a
       lot in common. Something could maybe be done about this.
@@ -161,3 +163,14 @@ TODO: generateSomething functions in verilog_writer.cpp show a
 TODO: Say we have declared in a MathML block, this '<cn> test </cn>'.
       SBML sees this as a number (of value 0) since we have
       a <cn> tag. This is an error and we should find that.
+
+<<< 2018-06-28 >>>
+
+TODO: InterRep::convertTree is dispatching on ASTNode type. This can
+      be made more simple by just having each ASTNode subclass
+      implement its own convertTree.
+
+TODO: Make sure we perform the various checks on
+      FunctionDefinitions like libsbml requires (i.e. No
+      variables in function body that aren't declared as
+      an argument. No recursive functions.)

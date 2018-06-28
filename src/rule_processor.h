@@ -1,6 +1,8 @@
 #ifndef RULE_PROCESSOR_INCLUDED
 #define RULE_PROCESSOR_INCLUDED
 
+#include "ast.h"
+
 #include <sbml/SBMLTypes.h>
 
 namespace abaqs {
@@ -11,6 +13,11 @@ namespace abaqs {
   private:
     Compiler& compiler;
 
+    void resolveFunctionNames(
+      const std::string& ruleName,
+      ASTNode * node);
+    const CompilerFunction * lookupCompilerFunction(
+      const std::string& name);
   public:
       RuleProcessor(Compiler& compiler);
       void processRule(const libsbml::Rule& rule);

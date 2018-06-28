@@ -43,19 +43,15 @@ namespace abaqs {
     bool value_is_valid;
   };
 
-  //TODO Revise comment
-  // When compiler function is used by the RuleProcessor to parse the
-  // rule math defintion, we will simply 'splice' the ASTNode (containing
-  // the entire math definition of a given function) into the
-  // Rule ASTNode. (Can't actually do direct splicing though since
-  // the AST nodes are const. We will pretend like we are.)
   class CompilerFunction {
+    void recordFunctionArgs(const libsbml::ASTNode * node);
   public:
     CompilerFunction(const libsbml::FunctionDefinition& func);
     bool operator==(const CompilerFunction& func);
 
     std::string var_name;
-    AST ast;
+    AST body;
+    std::vector<std::string> args;
 
     friend std::ostream& operator<<(std::ostream& out,
       const CompilerFunction& func);
