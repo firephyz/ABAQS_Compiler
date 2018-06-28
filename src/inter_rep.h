@@ -6,6 +6,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 
 namespace abaqs {
 
@@ -25,15 +26,31 @@ namespace abaqs {
     friend class Compiler;
   };
 
+  // Selects how variable names are resolved.
+  enum class IRConvertType {
+    // Searches parameters and function definitions
+    General,
+    // Searches lambda bindings and function definitions
+    Lambda
+  };
+
   class InterRep {
     static int temp_id;
+
+    const Compiler& compiler;
+    std::vector<std::pair<std::string, double>> bindings;
   public:
     std::vector<IRStatement> statements;
     std::string last_temp;
 
     InterRep(const Compiler& compiler, const AST& tree);
 
-    std::string convertTree(const ASTNode * node);
+    std::string convertTree(
+      const ASTNode * node, IRConvertType ctype);
+    double lookupVariableBinding(const std::string& var);
+    void storeVariableBindings(
+      std::vector<std::string> vars,
+      std::vector<ASTNode *> values);
   };
 }
 

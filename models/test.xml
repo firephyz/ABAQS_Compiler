@@ -8,7 +8,7 @@
             <bvar> <ci> x </ci> </bvar>
             <bvar> <ci> y </ci> </bvar>
             <apply>
-              <plus/>
+              <divide/>
               <ci> x </ci>
               <ci> y </ci>
             </apply>

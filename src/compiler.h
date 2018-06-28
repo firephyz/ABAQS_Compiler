@@ -40,6 +40,9 @@ namespace abaqs {
     const CompilerRule& getRule(const std::string rule_name);
     std::string compileRule(const CompilerRule& rule);
 
+    const CompilerFunction * lookupFunctionName(
+      const std::string& name) const;
+
     friend class RuleProcessor;
     friend class AST;
     friend class VerilogWriter;

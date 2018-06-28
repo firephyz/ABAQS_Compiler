@@ -204,6 +204,19 @@ namespace abaqs {
     return std::move(result);
   }
 
+  const CompilerFunction *
+  Compiler::lookupFunctionName(
+    const std::string& name) const
+  {
+    for(auto& func : functions) {
+      if(func.var_name == name) {
+        return &func;
+      }
+    }
+
+    return nullptr;
+  }
+
   CompilerRuntimeError::CompilerRuntimeError(std::string str)
   : std::runtime_error("Runtime error: " + str)
   {}
