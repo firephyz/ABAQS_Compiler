@@ -5,8 +5,21 @@
 #include "verilog_writer.h"
 #include "rule.h"
 #include "inter_rep.h"
+#include "ast.h"
 
 #include <sbml/SBMLTypes.h>
+
+/* General flow of data
+1. Collect functions
+2. Collect species
+3. Collect parameters and perform value checking
+4. Store initial assignment requests
+    - What then?
+5. Store rules
+6. Perform name resolution and linking
+7. Execute code transform into
+    intermediate representation.
+*/
 
 namespace abaqs {
 
@@ -42,7 +55,64 @@ namespace abaqs {
     processInitAssignments();
     processRules();
 
+    // Resolve function, parameter, rule names, etc.
+    linkComponentNames();
+
+    // Call verilog writer to begin code translation
     output.run();
+  }
+
+  void
+  Compiler::linkComponentNames()
+  {
+    // Link function definition names to the code that calls them
+    for(CompilerFunction& func : functions) {
+      resolveFunctionNames(func.var_name, func.body.node.get());
+    }
+    for(CompilerRule& rule : rules) {
+      resolveFunctionNames(rule.var_name, rule.math.node.get());
+    }
+  }
+
+  void
+  Compiler::resolveFunctionNames(const std::string& name, ASTNode * node)
+  {
+    if(node->type == ASTType::UserFunction) {
+      ASTUserFunction& userfunc =
+        static_cast<ASTUserFunction&>(*node);
+      const CompilerFunction * cfunc {
+        lookupCompilerFunction(userfunc.name)};
+      if(cfunc == nullptr) {
+        throw CompilerRuntimeError(
+          "Compiler rule or function \'" +
+          name +
+          "\' is using an undefined function "
+          "definition \'" + userfunc.name + "\'.");
+      }
+
+      userfunc.func = cfunc;
+    }
+
+    if(node->type == ASTType::UserFunction ||
+       node->type == ASTType::BuiltinFunction) {
+      ASTFunction& func = static_cast<ASTFunction&>(*node);
+
+      for(ASTNode * child : func.children) {
+        resolveFunctionNames(name, child);
+      }
+    }
+  }
+
+  const CompilerFunction *
+  Compiler::lookupCompilerFunction(const std::string& name)
+  {
+    for(const CompilerFunction& func : functions) {
+      if(func.var_name == name) {
+        return &func;
+      }
+    }
+    
+    return nullptr;
   }
 
   void
@@ -54,7 +124,7 @@ namespace abaqs {
     for(uint i = 0; i < assigns->size(); ++i) {
       const libsbml::InitialAssignment * init = assigns->get(i);
 
-      Compiler::assigns.push_back(CompilerInitAssignment(*init));
+      Compiler::assigns.emplace_back(CompilerInitAssignment(*init));
     }
   }
 
@@ -188,7 +258,8 @@ namespace abaqs {
   {
     std::string result;
 
-    const InterRep ir(*this, rule.math);
+    // Transforms the AST tree rule.math into the InterRep.
+    const InterRep ir(*this, rule.math, IRConvertType::General);
     for(auto& statement : ir.statements) {
       result += statement.toString() + "\n";
     }
@@ -215,6 +286,23 @@ namespace abaqs {
     }
 
     return nullptr;
+  }
+
+  double
+  Compiler::lookupParameterValue(const std::string& var) const
+  {
+    for(const CompilerParameter& param : parameters) {
+      if(param.name == var) {
+        if(!param.value_is_valid) {
+          throw CompilerRuntimeError(
+            "Parameter \'" + param.name + "\' value is not set.");
+        }
+        return param.value;
+      }
+    }
+
+    throw CompilerRuntimeError(
+      "Unbound parameter reference to \'" + var + "\'.");
   }
 
   CompilerRuntimeError::CompilerRuntimeError(std::string str)

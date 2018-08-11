@@ -13,11 +13,6 @@ namespace abaqs {
   private:
     Compiler& compiler;
 
-    void resolveFunctionNames(
-      const std::string& ruleName,
-      ASTNode * node);
-    const CompilerFunction * lookupCompilerFunction(
-      const std::string& name);
   public:
       RuleProcessor(Compiler& compiler);
       void processRule(const libsbml::Rule& rule);

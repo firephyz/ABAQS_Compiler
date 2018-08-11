@@ -34,23 +34,35 @@ namespace abaqs {
     Lambda
   };
 
+  using BindingFrame =
+    std::vector<std::pair<std::string, double>>;
+
   class InterRep {
     static int temp_id;
 
     const Compiler& compiler;
-    std::vector<std::pair<std::string, double>> bindings;
+    BindingFrame bindings;
   public:
     std::vector<IRStatement> statements;
     std::string last_temp;
 
-    InterRep(const Compiler& compiler, const AST& tree);
+    InterRep(const Compiler& compiler,
+             const AST& tree,
+             const IRConvertType type);
 
+    // Binding frame pointer is a pointer to a frame constructed
+    // above this lambda form (i.e. we were already inside
+    // a lambda form so it constructed our bindings for us).
     std::string convertTree(
-      const ASTNode * node, IRConvertType ctype);
-    double lookupVariableBinding(const std::string& var);
+      const ASTNode * node,
+      IRConvertType ctype);
+    double lookupVariableBinding(
+      const std::string& var,
+      const BindingFrame* frame);
     void storeVariableBindings(
       std::vector<std::string> vars,
-      std::vector<ASTNode *> values);
+      std::vector<ASTNode *> values,
+      const bool has_needed_bindings);
   };
 }
 

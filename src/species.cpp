@@ -17,6 +17,8 @@ namespace abaqs {
     return name == sp.name;
   }
 
+  // TODO: Doesn't currently store species anywhere.
+  // Do we need to? Given the specifics of the problem.
   void
   SpeciesRecord::record(const libsbml::Species& sp)
   {

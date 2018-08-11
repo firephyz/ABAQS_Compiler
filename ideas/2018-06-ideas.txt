@@ -151,6 +151,7 @@ TODO: If the directory out/ doesn't exist for the output files,
 
 Ask Peter about having multiple sequential and combinatorial blocks.
 
+*** Fix representation
 *** Should function be inlined or should they operate as seperate
     little modules?
 *** Should we define each parameter in its own always block?

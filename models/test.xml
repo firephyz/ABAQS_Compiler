@@ -2,15 +2,32 @@
 <sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
   <model id="dictyostelium_qs">
     <listOfFunctionDefinitions>
+      <functionDefinition id="square">
+        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
+          <lambda>
+            <bvar> <ci> x </ci> </bvar>
+            <apply>
+              <times/>
+              <ci> x </ci>
+              <ci> x </ci>
+            </apply>
+          </lambda>
+        </math>
+      </functionDefinition>
       <functionDefinition id="test-func">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <lambda>
             <bvar> <ci> x </ci> </bvar>
             <bvar> <ci> y </ci> </bvar>
             <apply>
-              <divide/>
-              <ci> x </ci>
-              <ci> y </ci>
+              <times/>
+              <!--<ci> y </ci>
+              <ci> x </ci>-->
+              <apply>
+                <ci> square </ci>
+                <ci> x </ci>
+              </apply>
+              <cn> 3 </cn>
             </apply>
           </lambda>
         </math>
@@ -28,6 +45,8 @@
       <parameter id="Q_OUT" constant="false"/>
       <parameter id="MOVE_DIR" constant="false"/>
       <parameter id="MOVE_RQ" constant="false"/>
+
+      <parameter id="b" value="9" constant="true"/>
     </listOfParameters>
     <listOfInitialAssignments>
     </listOfInitialAssignments>
@@ -35,17 +54,13 @@
       <assignmentRule variable="Q_OUT">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <apply>
-            <eq/>
+            <plus/>
+            <cn> 1 </cn>
             <apply>
-              <times/>
-              <apply>
-                <ci> test-func </ci>
-                <cn> 1 </cn>
-                <cn> 2 </cn>
-              </apply>
-              <cn> 5 </cn>
+              <ci> test-func </ci>
+              <cn> 1 </cn>
+              <cn> 2 </cn>
             </apply>
-            <ci> b </ci>
           </apply>
         </math>
       </assignmentRule>
