@@ -2,18 +2,6 @@
 <sbml xmlns="http://www.sbml.org/sbml/level3/version2/core" level="3" version="2">
   <model id="dictyostelium_qs">
     <listOfFunctionDefinitions>
-      <functionDefinition id="square">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
-          <lambda>
-            <bvar> <ci> x </ci> </bvar>
-            <apply>
-              <times/>
-              <ci> x </ci>
-              <ci> x </ci>
-            </apply>
-          </lambda>
-        </math>
-      </functionDefinition>
       <functionDefinition id="test-func">
         <math xmlns="http://www.w3.org/1998/Math/MathML"	      xmlns:sbml="http://www.sbml.org/sbml/level3/version2/core">
           <lambda>
@@ -21,12 +9,8 @@
             <bvar> <ci> y </ci> </bvar>
             <apply>
               <times/>
-              <!--<ci> y </ci>
-              <ci> x </ci>-->
-              <apply>
-                <ci> square </ci>
-                <ci> x </ci>
-              </apply>
+              <ci> y </ci>
+              <ci> x </ci>
               <cn> 3 </cn>
             </apply>
           </lambda>
@@ -61,6 +45,7 @@
               <cn> 1 </cn>
               <cn> 2 </cn>
             </apply>
+            <cn> 2 </cn>
           </apply>
         </math>
       </assignmentRule>

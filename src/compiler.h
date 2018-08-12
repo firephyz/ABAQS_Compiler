@@ -7,6 +7,7 @@
 #include "abaqs_types.h"
 #include "rule.h"
 #include "ast.h"
+#include "inter_rep.h"
 
 #include <sbml/SBMLTypes.h>
 

@@ -259,9 +259,14 @@ namespace abaqs {
     std::string result;
 
     // Transforms the AST tree rule.math into the InterRep.
-    const InterRep ir(*this, rule.math, IRConvertType::General);
+    InterRep ir(*this, rule.math, IRConvertType::General);
+    ir.stripUselessZeros();
+    ir.constantFold(ir.statements.size() - 1);
+
     for(auto& statement : ir.statements) {
-      result += statement.toString() + "\n";
+      if(statement.is_valid) {
+        result += statement.toString() + "\n";
+      }
     }
 
     // Final variable assignment isn't included in the rule's ast

@@ -4,15 +4,6 @@
 // Values must be passed into the function call.
 // I am assuming also that you cannot have nested 
 // lambda forms even inside a FunctionDefinition.
-// This may be wrong, needs careful reading of the spec.
-//
-// I break these above specs only in that I allow
-// other functions to be called in a lambda body even
-// though they aren't passed as an argument. 
-// This is handled by letting the current InterRep
-// object A create another instance of itself B but with
-// the other function as the target. We then append
-// the intermediate rep of B to that of A.
 //
 // All this means for now is that the InterRep object
 // needs only one context frame to resolve names.
@@ -25,15 +16,20 @@
 
 namespace abaqs {
 
+  IRSource::IRSource(const std::string& data)
+    : data {data}
+  {}
+
   IRStatement::IRStatement(
     const std::string& target,
     const std::string& src0,
     const std::string& src1,
     const std::string& op)
     : target {target}
-    , src0 {src0}
-    , src1 {src1}
+    , src0 {std::move(IRSource(src0))}
+    , src1 {std::move(IRSource(src1))}
     , operation {op}
+    , type {IRStatementType::BinaryFunction}
   {}
 
   const std::string
@@ -42,9 +38,13 @@ namespace abaqs {
     std::string result;
     result += target;
     result += " = ";
-    result += src0;
-    result += " " + operation + " ";
-    result += src1;
+    result += src0.data;
+
+    if(type == IRStatementType::BinaryFunction) {
+      result += " " + operation + " ";
+      result += src1.data;
+    }
+
     result += ";";
     return std::move(result);
   }
@@ -59,6 +59,88 @@ namespace abaqs {
         tree.node.get(), 
         type))
   {}
+
+  void
+  InterRep::stripUselessZeros()
+  {
+    for(auto& statement : statements) {
+      if(statement.src1.data == "0") {
+        statement.type = IRStatementType::ConstantAssignment;
+      }
+    }
+  }
+
+  // TODO: The statement that replaces a source value
+  // might itself be constant but not a number. We must loop and continue
+  // to code fold down until all we have are numbers.
+  void
+  InterRep::constantFold(int statement_index)
+  {
+    auto& statement = statements[statement_index];
+    if(statement.type != IRStatementType::BinaryFunction) {
+      throw CompilerRuntimeError("Cannot code fold a constant.");
+    }
+
+    // See what two arguments this node requires.
+    int child0_target =
+      std::stoi(statement.src0.data.substr(1));
+    int child1_target =
+      std::stoi(statement.src1.data.substr(1));
+
+    // Locate the correct statement and constant fold it
+    int child0_index = findTargetStatement(child0_target);
+    if(statements[child0_index].type == IRStatementType::BinaryFunction) {
+      constantFold(child0_index);
+    }
+    else {
+      statement.src0 = statements[child0_index].src0;
+      statements[child0_index].is_valid = false;
+      statement.src0.was_modified = true;
+    }
+
+    // Locate the correct statement for the next and
+    // constant fold it.
+    int child1_index = findTargetStatement(child1_target);
+    if(statements[child1_index].type == IRStatementType::BinaryFunction) {
+      constantFold(child1_index);
+    }
+    else {
+      statement.src1 = statements[child1_index].src0;
+      while(statement.src1.type ==
+        IRStatementType::ConstantAssignment) {
+        int next = std::stoi(statement.src1.data.substr(1));
+      }
+      statements[child1_index].is_valid = false;
+      statement.src1.was_modified = true;
+    }
+
+    if(statement.src0.was_modified &&
+       statement.src1.was_modified) {
+      // Perform operation
+      // TODO: Just going to add for now
+      double result = std::stod(statement.src0.data) +
+        std::stod(statement.src1.data);
+      statement.src0.data = std::to_string(result);
+      statement.src0.was_modified = false;
+      statement.type = IRStatementType::ConstantAssignment;
+    }
+  }
+
+  int
+  InterRep::findTargetStatement(int target_number)
+  {
+    int counter = 0;
+    for(auto& statement : statements) {
+      if(std::stoi(statement.target.substr(1)) == target_number) {
+        return counter;
+      }
+
+      ++counter;
+    }
+
+    throw CompilerRuntimeError(
+      "Requesting a statement number that doesn't exist.");
+  }
 
   int InterRep::temp_id = 0;
 
@@ -95,7 +177,7 @@ namespace abaqs {
           IRStatement(
             target,
             std::to_string(
-              lookupVariableBinding(param.name, &bindings)),
+              lookupVariableBinding(param.name)),
             "0",
             "+"));
         break;
@@ -120,27 +202,7 @@ namespace abaqs {
         dynamic_cast<const ASTUserFunction&>(*node);
       const CompilerFunction& func = *userfunc.func;
       try {
-        bool has_needed_bindings = false;
-        if(ctype == IRConvertType::Lambda) {
-          has_needed_bindings = true;
-        }
-        storeVariableBindings(
-          func.args,
-          userfunc.children,
-          has_needed_bindings);
-        // If already in lambda form, recursively call
-        // another instance of intermediate representation.
-        // We will just copy the statements over when it's done.
-        if(ctype == IRConvertType::Lambda) {
-
-          const InterRep sub_ir(
-            compiler,
-            func.body,
-            IRConvertType::Lambda);
-          for(const IRStatement& statement : sub_ir.statements) {
-            statements.emplace_back(statement);
-          }
-        }
+        storeVariableBindings(func.args, userfunc.children);
       }
       catch(CompilerRuntimeError& error) {
         if(error.what() == std::string("args")) {
@@ -172,20 +234,8 @@ namespace abaqs {
   void
   InterRep::storeVariableBindings(
     std::vector<std::string> vars,
-    std::vector<ASTNode *> values,
-    const bool has_needed_bindings)
+    std::vector<ASTNode *> values)
   {
-    // We don't need bindings from previous lambda forms
-    // encountered during other function calls
-    BindingFrame new_frame;
-    BindingFrame* target_frame = nullptr;
-    if(has_needed_bindings) {
-      new_frame = bindings;
-      target_frame = &new_frame;
-    }
-    else {
-      target_frame = &bindings;
-    }
     bindings.clear();
 
     // convertTree handles the error
@@ -199,8 +249,7 @@ namespace abaqs {
       double value = 0;
       if(node->type == ASTType::Parameter) {
         ASTParameter& param = static_cast<ASTParameter&>(*node);
-        value = lookupVariableBinding(
-          param.name, target_frame);
+        value = lookupVariableBinding(param.name);
       }
       else if(node->type == ASTType::Number) {
         ASTNumber& num = static_cast<ASTNumber&>(*node);
@@ -218,11 +267,9 @@ namespace abaqs {
   }
 
   double
-  InterRep::lookupVariableBinding(
-    const std::string& var,
-    const BindingFrame* frame)
+  InterRep::lookupVariableBinding(const std::string& var)
   {
-    for(auto pair : *frame) {
+    for(auto pair : bindings) {
       if(pair.first == var) {
         return pair.second;
       }

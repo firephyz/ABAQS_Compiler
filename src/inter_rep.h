@@ -10,12 +10,27 @@
 
 namespace abaqs {
 
-  class IRStatement {
-    std::string target;
-    std::string src0;
-    std::string src1;
-    std::string operation;
+  enum class IRStatementType {
+    ConstantAssignment,
+    BinaryFunction
+  };
+
+  class IRSource {
   public:
+    IRSource(const std::string& data);
+    
+    bool was_modified = false;
+    std::string data;
+  };
+
+  class IRStatement {
+  public:
+    std::string target;
+    IRSource src0;
+    IRSource src1;
+    std::string operation;
+    IRStatementType type;
+    bool is_valid = true;
     IRStatement(
       const std::string& target,
       const std::string& src0,
@@ -56,13 +71,13 @@ namespace abaqs {
     std::string convertTree(
       const ASTNode * node,
       IRConvertType ctype);
-    double lookupVariableBinding(
-      const std::string& var,
-      const BindingFrame* frame);
+    void stripUselessZeros();
+    int findTargetStatement(int target_number);
+    void constantFold(int statement_index);
+    double lookupVariableBinding(const std::string& var);
     void storeVariableBindings(
       std::vector<std::string> vars,
-      std::vector<ASTNode *> values,
-      const bool has_needed_bindings);
+      std::vector<ASTNode *> values);
   };
 }
 

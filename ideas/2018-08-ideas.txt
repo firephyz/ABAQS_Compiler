@@ -1,0 +1,24 @@
+<<< 2018-08-12 >>>
+SBML is getting more difficult to work with. Building large models
+  in a language that puts restrictions on how you compose functions
+  and how namespaces are resolved is very unwieldy. You cannot
+  have a user function Foo which calls another user function Square
+  inside it for example. SBML doesn't allow this because it has 
+  potential to cause never ending recursive loops. A smarter compiler
+  would be needed if we wanted such expressability.
+
+  The cleanest solution is to allow free function composition. Eases
+  the life of the model maker. It should be up to said model
+  maker to ensure that the code they write won't generate
+  cyclic hardware which doesn't terminate.
+
+  What is a required is a tool which regular system biologists
+  can use to express their thoughts in a nearly free way. This
+  tool does the hard job of translating that into a rigid hardware
+  form that is (likely) to be free of cyclic loops.
+
+TODO: Currently method of storing the intermediate representation
+  makes many operations inefficient. If one statement requires target
+  statement t1 for example, the index of that statement t1 is not
+  simply 1. Some linear searching currently needs to be involved
+  in order to find the correct target statement.
