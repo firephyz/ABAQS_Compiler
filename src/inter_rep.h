@@ -20,6 +20,13 @@ namespace abaqs {
     Node
   };
 
+  enum class IROperation {
+    Plus,
+    Sub,
+    Mult,
+    Div
+  };
+
   // Needs a better way at representing the data
   // field. A string requires too much management.
   class IRSource {
@@ -36,7 +43,7 @@ namespace abaqs {
     std::string target;
     IRSource src0;
     IRSource src1;
-    std::string operation;
+    IROperation operation;
     IRStatementType type;
     bool is_valid = true;
     IRStatement(
@@ -48,6 +55,8 @@ namespace abaqs {
 
     friend class Compiler;
   };
+
+  void performArithmeticOnConstantExpr(IRStatement& statement);
 
   // Selects how variable names are resolved.
   enum class IRConvertType {
@@ -82,11 +91,15 @@ namespace abaqs {
     void stripUselessZeros();
     int findTargetStatement(const IRSource& src);
     void constantFold(int statement_index);
+
     double lookupVariableBinding(const std::string& var);
     void storeVariableBindings(
       std::vector<std::string> vars,
       std::vector<ASTNode *> values);
   };
+
+  IROperation determineOperationType(const std::string& op);
+  std::string IROpToString(const IROperation& op);
 }
 
 #endif

@@ -33,7 +33,7 @@ namespace abaqs {
     : target {target}
     , src0 {std::move(IRSource(src0))}
     , src1 {std::move(IRSource(src1))}
-    , operation {op}
+    , operation {determineOperationType(op)}
     , type {IRStatementType::BinaryFunction}
   {}
 
@@ -46,7 +46,7 @@ namespace abaqs {
     result += src0.data;
 
     if(type == IRStatementType::BinaryFunction) {
-      result += " " + operation + " ";
+      result += " " + IROpToString(operation) + " ";
       result += src1.data;
     }
 
@@ -73,6 +73,39 @@ namespace abaqs {
         statement.type = IRStatementType::ConstantAssignment;
       }
     }
+  }
+
+  void
+  performAritheticOnConstantExpr(
+    IRStatement& statement)
+  {
+    double arg0 = std::stod(statement.src0.data);
+    double arg1 = std::stod(statement.src1.data);
+    double result = 0;
+
+    switch(statement.operation) {
+      case IROperation::Plus:
+        result = arg0 + arg1;
+        break;
+      case IROperation::Sub:
+        result = arg0 - arg1;
+        break;
+      case IROperation::Mult:
+        result = arg0 * arg1;
+        break;
+      case IROperation::Div:
+        if(arg1 == 0) {
+          throw CompilerRuntimeError(
+            "Compiler attempting to constant fold a "
+            "division by zero.");
+        }
+        result = arg0 / arg1;
+        break;
+    }
+
+    statement.src0.data = std::to_string(result);
+    statement.src0.was_modified = false;
+    statement.type = IRStatementType::ConstantAssignment;
   }
 
   // TODO: The statement that replaces a source value
@@ -121,13 +154,7 @@ namespace abaqs {
 
     if(statement.src0.was_modified &&
        statement.src1.was_modified) {
-      // Perform operation
-      // TODO: Just going to add for now
-      double result = std::stod(statement.src0.data) +
-        std::stod(statement.src1.data);
-      statement.src0.data = std::to_string(result);
-      statement.src0.was_modified = false;
-      statement.type = IRStatementType::ConstantAssignment;
+      performArithmeticOnConstantExpr(statement);
     }
   }
 
@@ -296,5 +323,41 @@ namespace abaqs {
     }
 
     return 0;
+  }
+
+  // Arithmetic operation lookup table
+  using table_type =
+    std::vector<std::pair<char, IROperation>>;
+  const table_type op_table =
+    {{'+', IROperation::Plus},
+     {'-', IROperation::Sub},
+     {'*', IROperation::Mult},
+     {'/', IROperation::Div}};
+
+  IROperation
+  determineOperationType(const std::string& op)
+  {
+    for(auto& pair : op_table) {
+      if(op[0] == pair.first) {
+        return pair.second;
+      }
+    }
+
+    throw CompilerRuntimeError(
+      "Couldn't determine operation type for " + op);
+  }
+
+  std::string
+  IROpToString(const IROperation& op)
+  {
+    for(auto& pair : op_table) {
+      if(op == pair.second) {
+        return std::to_string(pair.first);
+      }
+    }
+
+    throw CompilerRuntimeError(
+      "Internal compiler error: Missing op_table value "
+      "for operation number " + static_cast<int>(op));
   }
 }
