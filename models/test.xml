@@ -11,6 +11,7 @@
               <times/>
               <ci> y </ci>
               <ci> x </ci>
+              <ci> x </ci>
               <cn> 3 </cn>
             </apply>
           </lambda>
@@ -42,7 +43,7 @@
             <cn> 1 </cn>
             <apply>
               <ci> test-func </ci>
-              <cn> 1 </cn>
+              <cn> 3 </cn>
               <cn> 2 </cn>
             </apply>
             <cn> 2 </cn>

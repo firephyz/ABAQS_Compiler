@@ -17,8 +17,13 @@
 namespace abaqs {
 
   IRSource::IRSource(const std::string& data)
-    : data {data}
-  {}
+    : type {IRSourceType::Node}
+    , data {data}
+  {
+    if(data[0] != 't') {
+      type = IRSourceType::Number;
+    }
+  }
 
   IRStatement::IRStatement(
     const std::string& target,
@@ -81,38 +86,38 @@ namespace abaqs {
       throw CompilerRuntimeError("Cannot code fold a constant.");
     }
 
-    // See what two arguments this node requires.
-    int child0_target =
-      std::stoi(statement.src0.data.substr(1));
-    int child1_target =
-      std::stoi(statement.src1.data.substr(1));
+    // Locate the correct statement to constant fold
+    do {
+      int child0_index = findTargetStatement(statement.src0);
 
-    // Locate the correct statement and constant fold it
-    int child0_index = findTargetStatement(child0_target);
-    if(statements[child0_index].type == IRStatementType::BinaryFunction) {
-      constantFold(child0_index);
-    }
-    else {
-      statement.src0 = statements[child0_index].src0;
-      statements[child0_index].is_valid = false;
-      statement.src0.was_modified = true;
-    }
-
-    // Locate the correct statement for the next and
-    // constant fold it.
-    int child1_index = findTargetStatement(child1_target);
-    if(statements[child1_index].type == IRStatementType::BinaryFunction) {
-      constantFold(child1_index);
-    }
-    else {
-      statement.src1 = statements[child1_index].src0;
-      while(statement.src1.type ==
-        IRStatementType::ConstantAssignment) {
-        int next = std::stoi(statement.src1.data.substr(1));
+      if(statements[child0_index].type == IRStatementType::BinaryFunction) {
+        constantFold(child0_index);
       }
-      statements[child1_index].is_valid = false;
-      statement.src1.was_modified = true;
-    }
+      else {
+        statement.src0 = statements[child0_index].src0;
+        statements[child0_index].is_valid = false;
+        statement.src0.was_modified = true;
+        if(statement.src0.type == IRSourceType::Number) {
+          break;
+        }
+      }
+    } while(true);
+
+    do {
+      int child1_index = findTargetStatement(statement.src1);
+
+      if(statements[child1_index].type == IRStatementType::BinaryFunction) {
+        constantFold(child1_index);
+      }
+      else {
+        statement.src1 = statements[child1_index].src0;
+        statements[child1_index].is_valid = false;
+        statement.src1.was_modified = true;
+        if(statement.src1.type == IRSourceType::Number) {
+          break;
+        }
+      }
+    } while(true);
 
     if(statement.src0.was_modified &&
        statement.src1.was_modified) {
@@ -126,9 +131,12 @@ namespace abaqs {
     }
   }
 
+  // TODO: Implemented search using inefficient linear search.
+  // Do something else.
   int
-  InterRep::findTargetStatement(int target_number)
+  InterRep::findTargetStatement(const IRSource& src)
   {
+    int target_number = std::stoi(src.data.substr(1));
     int counter = 0;
     for(auto& statement : statements) {
       if(std::stoi(statement.target.substr(1)) == target_number) {

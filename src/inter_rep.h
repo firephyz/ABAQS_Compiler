@@ -15,10 +15,18 @@ namespace abaqs {
     BinaryFunction
   };
 
+  enum class IRSourceType {
+    Number,
+    Node
+  };
+
+  // Needs a better way at representing the data
+  // field. A string requires too much management.
   class IRSource {
   public:
     IRSource(const std::string& data);
     
+    IRSourceType type;
     bool was_modified = false;
     std::string data;
   };
@@ -72,7 +80,7 @@ namespace abaqs {
       const ASTNode * node,
       IRConvertType ctype);
     void stripUselessZeros();
-    int findTargetStatement(int target_number);
+    int findTargetStatement(const IRSource& src);
     void constantFold(int statement_index);
     double lookupVariableBinding(const std::string& var);
     void storeVariableBindings(
