@@ -76,7 +76,7 @@ namespace abaqs {
   }
 
   void
-  performAritheticOnConstantExpr(
+  performArithmeticOnConstantExpr(
     IRStatement& statement)
   {
     double arg0 = std::stod(statement.src0.data);
