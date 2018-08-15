@@ -1,0 +1,6 @@
+1. Refactor and organize code base.
+2. Interface with the IO ports
+3. Work on getting constant parameters working with the
+  rest of the compiler.
+4. Add support for other data types, not just doubles
+  - booleans too

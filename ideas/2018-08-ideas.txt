@@ -26,3 +26,10 @@ TODO: Currently method of storing the intermediate representation
 <<< 2018-08-14 >>>
   Creating this node just so I can branch to a 'in_progress' branch.
   master branch will be reserved for working releases.
+
+<<< 2018-08-15 >>>
+TODO: If the scale of compilation gets large enough,
+  we may want to develop a 'compilation unit' model similar
+  to how C and C++ handles compilation. Otherwise, we spend
+  more and more time processing the ever growing intermediate
+  representation.

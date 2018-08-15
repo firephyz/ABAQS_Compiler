@@ -45,7 +45,7 @@ module cell_rules #(
   input [NUM_BITS-1:0] cell_state_in,
   input [TYPE_BIT_WIDTH-1:0] type_in,
   output [NUM_BITS-1:0] cell_state_out,
-  output reg [BIT_WIDTH-1:0] quantity, // The ammount of chemical secreted by the cell
+  output [BIT_WIDTH-1:0] quantity, // The ammount of chemical secreted by the cell
 
   output move_rq,                      // Move if adjacent space is open
   output [1:0] move_direction          // 0x0 = N, 0x1 = S, 0x2 = E, 0x3 = W
@@ -57,7 +57,7 @@ module cell_rules #(
 // This is the array that holds NUM_REGS many variables, each with a bit width
 // of BIT_WIDTH.
 wire [BIT_WIDTH-1:0] cell_state_in_array [NUM_REGS-1:0];
-reg [BIT_WIDTH-1:0] cell_state_out_array [NUM_REGS-1:0];
+wire [BIT_WIDTH-1:0] cell_state_out_array [NUM_REGS-1:0];
 
 // This generate block breaks cell_state_in up into individual regs and assigns
 // them to an array so they can be accessed easier. It also groups the array

@@ -187,7 +187,7 @@ namespace abaqs {
 
       check_valid_species(*sp);
 
-      species.record(*sp);
+      species.storeCompilerSpecies(sp->getId());
     }
   }
 
