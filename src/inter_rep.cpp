@@ -1,12 +1,12 @@
 // As per SBML spec 3.2, lambda forms inside
 // functions cannot reference names outside of
-// the lambda expression (there is not global namespace).
+// the lambda expression (there is no global namespace).
 // Values must be passed into the function call.
 // I am assuming also that you cannot have nested 
 // lambda forms even inside a FunctionDefinition.
 //
 // All this means for now is that the InterRep object
-// needs only one context frame to resolve names.
+// needs only one binding context frame to resolve names.
 
 #include "inter_rep.h"
 #include "ast.h"

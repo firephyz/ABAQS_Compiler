@@ -34,6 +34,7 @@ namespace abaqs {
     IRSource(const std::string& data);
     
     IRSourceType type;
+    // Used to know if constant folding modified this node.
     bool was_modified = false;
     std::string data;
   };
@@ -44,7 +45,11 @@ namespace abaqs {
     IRSource src0;
     IRSource src1;
     IROperation operation;
+    // Type defaults to binary operation
     IRStatementType type;
+    // Statement is invalidated if constant folding
+    // uses its value and the statement is no longer
+    // needed.
     bool is_valid = true;
     IRStatement(
       const std::string& target,
@@ -70,6 +75,7 @@ namespace abaqs {
     std::vector<std::pair<std::string, double>>;
 
   class InterRep {
+    // Assigns a unique number to each IR statement
     static int temp_id;
 
     const Compiler& compiler;
