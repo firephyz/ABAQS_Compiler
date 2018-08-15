@@ -7,7 +7,8 @@
 namespace abaqs {
 
   RuleProcessor::RuleProcessor(Compiler& compiler)
-  : compiler {compiler} {}
+  : compiler {compiler}
+  {}
 
   void
   RuleProcessor::processRule(const libsbml::Rule& rule)
@@ -21,7 +22,7 @@ namespace abaqs {
       }
     }
 
-    CompilerRule comp_rule(type, std::move(variable), rule.getMath());
-    compiler.rules.push_back(std::move(comp_rule));
+    compiler.rules.emplace_back(
+      CompilerRule(type, variable, rule.getMath()));
   }
 }

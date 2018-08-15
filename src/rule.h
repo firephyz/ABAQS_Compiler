@@ -21,7 +21,7 @@ namespace abaqs {
     AST math;
     
     CompilerRule(const RuleType type,
-                 const std::string&& name,
+                 std::string name,
                  const libsbml::ASTNode * math);
     CompilerRule(CompilerRule&& rule) = default;
     // Don't want to copy the AST

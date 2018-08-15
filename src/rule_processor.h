@@ -6,7 +6,7 @@
 #include <sbml/SBMLTypes.h>
 
 namespace abaqs {
-  // Forware declare for when compiler.h includes this file
+  // Forware declare for the reference used just below
   class Compiler;
 
   class RuleProcessor {
